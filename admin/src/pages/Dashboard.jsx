@@ -1,0 +1,532 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { 
+  Home, GraduationCap, FileText, TrendingUp, Users, 
+  Globe, Clock, CheckCircle, AlertCircle, ArrowRight, Info, BookOpen, Briefcase, Mail, HelpCircle, Library, Factory 
+} from 'lucide-react';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+
+export default function Dashboard() {
+  const [stats, setStats] = useState({
+    homeContent: { total: 0, published: 0, draft: 0 },
+    academicContent: { total: 0, published: 0, draft: 0 },
+    aboutContent: { total: 0, published: 0, draft: 0 },
+    blogContent: { total: 0, published: 0, draft: 0 },
+    careersContent: { total: 0, published: 0, draft: 0 },
+    contactContent: { total: 0, published: 0, draft: 0 },
+    faqContent: { total: 0, published: 0, draft: 0 },
+    libraryContent: { total: 0, published: 0, draft: 0 },
+    recentActivity: []
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const defaultStats = { total: 0, published: 0, draft: 0 };
+      
+      // Initialize all stats with defaults
+      let homeStats = { ...defaultStats };
+      let academicStats = { ...defaultStats };
+      let aboutStats = { ...defaultStats };
+      let blogStats = { ...defaultStats };
+      let careersStats = { ...defaultStats };
+      let contactStats = { ...defaultStats };
+      let faqStats = { ...defaultStats };
+      let libraryStats = { ...defaultStats };
+      let recentActivity = [];
+      
+      // Fetch home content stats
+      let homeData = [];
+      try {
+        const homeResponse = await axios.get(`${API_URL}/home/admin/en`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        homeData = homeResponse.data.data || [];
+        homeStats = {
+          total: homeData.length,
+          published: homeData.filter(item => item.isPublished).length,
+          draft: homeData.filter(item => !item.isPublished).length
+        };
+      } catch (error) {
+        // Silently handle - content may not exist yet
+      }
+
+      // Fetch academic content stats
+      let academicData = [];
+      try {
+        const academicResponse = await axios.get(`${API_URL}/academic-sections/admin/en`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        academicData = academicResponse.data.data || [];
+        academicStats = {
+          total: academicData.length,
+          published: academicData.filter(item => item.isPublished).length,
+          draft: academicData.filter(item => !item.isPublished).length
+        };
+      } catch (error) {
+        // Silently handle - content may not exist yet
+      }
+
+      // Fetch about content stats
+      let aboutData = [];
+      try {
+        const aboutResponse = await axios.get(`${API_URL}/about/admin/en`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        aboutData = aboutResponse.data.data || [];
+        aboutStats = {
+          total: aboutData.length,
+          published: aboutData.filter(item => item.isPublished).length,
+          draft: aboutData.filter(item => !item.isPublished).length
+        };
+      } catch (error) {
+        // Silently handle - content may not exist yet
+      }
+
+      // Fetch blog content stats
+      let blogData = [];
+      try {
+        const blogResponse = await axios.get(`${API_URL}/blog/admin/en`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        blogData = blogResponse.data.data || [];
+        blogStats = {
+          total: blogData.length,
+          published: blogData.filter(item => item.isPublished).length,
+          draft: blogData.filter(item => !item.isPublished).length
+        };
+      } catch (error) {
+        // Silently handle - content may not exist yet
+      }
+
+      // Fetch careers content stats
+      let careersData = [];
+      try {
+        const careersResponse = await axios.get(`${API_URL}/careers/admin/en`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        careersData = careersResponse.data.data || [];
+        careersStats = {
+          total: careersData.length,
+          published: careersData.filter(item => item.isPublished).length,
+          draft: careersData.filter(item => !item.isPublished).length
+        };
+      } catch (error) {
+        // Silently handle - content may not exist yet
+      }
+
+      // Fetch contact content stats
+      let contactData = [];
+      try {
+        const contactResponse = await axios.get(`${API_URL}/contact/admin/en`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        contactData = contactResponse.data.data || [];
+        contactStats = {
+          total: contactData.length,
+          published: contactData.filter(item => item.isPublished).length,
+          draft: contactData.filter(item => !item.isPublished).length
+        };
+      } catch (error) {
+        // Silently handle - content may not exist yet
+      }
+
+      // Fetch FAQ content stats
+      let faqData = [];
+      try {
+        const faqResponse = await axios.get(`${API_URL}/faq/admin/en`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        faqData = faqResponse.data.data || [];
+        faqStats = {
+          total: faqData.length,
+          published: faqData.filter(item => item.isPublished).length,
+          draft: faqData.filter(item => !item.isPublished).length
+        };
+      } catch (error) {
+        // Silently handle - content may not exist yet
+      }
+
+      // Fetch library content stats
+      let libraryData = [];
+      try {
+        const libraryResponse = await axios.get(`${API_URL}/library/admin/en`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        libraryData = libraryResponse.data.data || [];
+        libraryStats = {
+          total: libraryData.length,
+          published: libraryData.filter(item => item.isPublished).length,
+          draft: libraryData.filter(item => !item.isPublished).length
+        };
+      } catch (error) {
+        // Silently handle - content may not exist yet
+      }
+
+      // Build recent activity from all available data
+      recentActivity = [
+        ...homeData.slice(0, 1).map(item => ({
+          type: 'home',
+          section: item.section,
+          language: item.language,
+          updatedAt: item.updatedAt,
+          status: item.isPublished ? 'published' : 'draft'
+        })),
+        ...academicData.slice(0, 1).map(item => ({
+          type: 'academic',
+          section: item.section,
+          language: item.language,
+          updatedAt: item.updatedAt,
+          status: item.isPublished ? 'published' : 'draft'
+        })),
+        ...aboutData.slice(0, 1).map(item => ({
+          type: 'about',
+          section: item.section,
+          language: item.language,
+          updatedAt: item.updatedAt,
+          status: item.isPublished ? 'published' : 'draft'
+        })),
+        ...blogData.slice(0, 1).map(item => ({
+          type: 'blog',
+          section: item.section,
+          language: item.language,
+          updatedAt: item.updatedAt,
+          status: item.isPublished ? 'published' : 'draft'
+        })),
+        ...careersData.slice(0, 1).map(item => ({
+          type: 'careers',
+          section: item.section,
+          language: item.language,
+          updatedAt: item.updatedAt,
+          status: item.isPublished ? 'published' : 'draft'
+        })),
+        ...contactData.slice(0, 1).map(item => ({
+          type: 'contact',
+          section: item.section,
+          language: item.language,
+          updatedAt: item.updatedAt,
+          status: item.isPublished ? 'published' : 'draft'
+        })),
+        ...faqData.slice(0, 1).map(item => ({
+          type: 'faq',
+          section: item.section,
+          language: item.language,
+          updatedAt: item.updatedAt,
+          status: item.isPublished ? 'published' : 'draft'
+        })),
+        ...libraryData.slice(0, 1).map(item => ({
+          type: 'library',
+          section: item.section,
+          language: item.language,
+          updatedAt: item.updatedAt,
+          status: item.isPublished ? 'published' : 'draft'
+        }))
+      ];
+
+      // Set all stats at once
+      setStats({
+        homeContent: homeStats,
+        academicContent: academicStats,
+        aboutContent: aboutStats,
+        blogContent: blogStats,
+        careersContent: careersStats,
+        contactContent: contactStats,
+        faqContent: faqStats,
+        libraryContent: libraryStats,
+        recentActivity
+      });
+    } catch (error) {
+      console.error('Failed to fetch dashboard data:', error);
+      // Set all defaults if everything fails
+      setStats({
+        homeContent: { total: 0, published: 0, draft: 0 },
+        academicContent: { total: 0, published: 0, draft: 0 },
+        aboutContent: { total: 0, published: 0, draft: 0 },
+        blogContent: { total: 0, published: 0, draft: 0 },
+        careersContent: { total: 0, published: 0, draft: 0 },
+        contactContent: { total: 0, published: 0, draft: 0 },
+        faqContent: { total: 0, published: 0, draft: 0 },
+        libraryContent: { total: 0, published: 0, draft: 0 },
+        recentActivity: []
+      });
+    } finally {
+      setLoading(false);
+    };
+  }
+
+  const quickLinks = [
+    {
+      title: 'Home Page',
+      description: 'Manage home page content and sections',
+      icon: Home,
+      href: '/home-content',
+      color: 'from-purple-500 to-cyan-500',
+      stats: stats.homeContent
+    },
+    {
+      title: 'Academic Page',
+      description: 'Edit academic programs and content',
+      icon: GraduationCap,
+      href: '/academic-content',
+      color: 'from-purple-500 to-pink-500',
+      stats: stats.academicContent
+    },
+    {
+      title: 'About Page',
+      description: 'Manage about us page content',
+      icon: Info,
+      href: '/about-content',
+      color: 'from-indigo-500 to-purple-500',
+      stats: stats.aboutContent
+    },
+    {
+      title: 'Blog Page',
+      description: 'Manage blog posts and authors',
+      icon: BookOpen,
+      href: '/blog-content',
+      color: 'from-orange-500 to-pink-500',
+      stats: stats.blogContent
+    },
+    {
+      title: 'Careers Page',
+      description: 'Manage job listings and applications',
+      icon: Briefcase,
+      href: '/careers',
+      color: 'from-teal-500 to-green-500',
+      stats: stats.careersContent
+    },
+    {
+      title: 'Contact Page',
+      description: 'Manage contact form and messages',
+      icon: Mail,
+      href: '/contact',
+      color: 'from-orange-500 to-purple-500',
+      stats: stats.contactContent
+    },
+    {
+      title: 'FAQ Page',
+      description: 'Manage frequently asked questions',
+      icon: HelpCircle,
+      href: '/faq-dashboard',
+      color: 'from-blue-500 to-cyan-500',
+      stats: stats.faqContent
+    },
+    {
+      title: 'Library Page',
+      description: 'Manage digital library resources',
+      icon: Library,
+      href: '/library-dashboard',
+      color: 'from-indigo-500 to-blue-500',
+      stats: stats.libraryContent
+    }
+  ];
+
+  const totalContent = stats.homeContent.total + stats.academicContent.total + stats.aboutContent.total + stats.blogContent.total + stats.careersContent.total + stats.contactContent.total + stats.faqContent.total + stats.libraryContent.total;
+  const totalPublished = stats.homeContent.published + stats.academicContent.published + stats.aboutContent.published + stats.blogContent.published + stats.careersContent.published + stats.contactContent.published + stats.faqContent.published + stats.libraryContent.published;
+  const totalDraft = stats.homeContent.draft + stats.academicContent.draft + stats.aboutContent.draft + stats.blogContent.draft + stats.careersContent.draft + stats.contactContent.draft + stats.faqContent.draft + stats.libraryContent.draft;
+
+  return (
+    <div className="max-w-7xl mx-auto space-y-8">
+      {/* Welcome Section */}
+      <div className="bg-gradient-to-r from-purple-600 via-purple-600 to-cyan-600 rounded-2xl shadow-xl p-8 text-white">
+        <h1 className="text-3xl font-bold mb-2">Welcome to Ethronics CMS</h1>
+        <p className="text-purple-100 text-lg">
+          Manage your website content across multiple languages with ease
+        </p>
+      </div>
+
+      {/* Stats Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-3 bg-purple-50 rounded-lg">
+              <FileText className="w-6 h-6 text-purple-600" />
+            </div>
+            <TrendingUp className="w-5 h-5 text-green-500" />
+          </div>
+          <p className="text-sm text-gray-600 mb-1">Total Content</p>
+          <p className="text-3xl font-bold text-gray-900">{totalContent}</p>
+          <p className="text-xs text-gray-500 mt-2">Across all pages</p>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-3 bg-green-50 rounded-lg">
+              <CheckCircle className="w-6 h-6 text-green-600" />
+            </div>
+          </div>
+          <p className="text-sm text-gray-600 mb-1">Published</p>
+          <p className="text-3xl font-bold text-green-600">{totalPublished}</p>
+          <p className="text-xs text-gray-500 mt-2">Live on website</p>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-3 bg-yellow-50 rounded-lg">
+              <AlertCircle className="w-6 h-6 text-yellow-600" />
+            </div>
+          </div>
+          <p className="text-sm text-gray-600 mb-1">Drafts</p>
+          <p className="text-3xl font-bold text-yellow-600">{totalDraft}</p>
+          <p className="text-xs text-gray-500 mt-2">Pending review</p>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-3 bg-purple-50 rounded-lg">
+              <Globe className="w-6 h-6 text-purple-600" />
+            </div>
+          </div>
+          <p className="text-sm text-gray-600 mb-1">Languages</p>
+          <p className="text-3xl font-bold text-purple-600">3</p>
+          <p className="text-xs text-gray-500 mt-2">EN, AM, OM</p>
+        </div>
+      </div>
+
+      {/* Quick Links */}
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Content Management</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {quickLinks.map((link) => {
+            const Icon = link.icon;
+            return (
+              <Link
+                key={link.href}
+                to={link.href}
+                className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100"
+              >
+                <div className={`h-2 bg-gradient-to-r ${link.color}`}></div>
+                <div className="p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className={`p-3 bg-gradient-to-br ${link.color} rounded-lg`}>
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 group-hover:translate-x-1 transition-all" />
+                  </div>
+                  
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{link.title}</h3>
+                  <p className="text-gray-600 text-sm mb-4">{link.description}</p>
+                  
+                  <div className="flex items-center space-x-4 text-sm">
+                    <div className="flex items-center space-x-1">
+                      <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                      <span className="text-gray-600">{link.stats.total} sections</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span className="text-gray-600">{link.stats.published} published</span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Recent Activity */}
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Recent Activity</h2>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+          {stats.recentActivity.length > 0 ? (
+            <div className="divide-y divide-gray-100">
+              {stats.recentActivity.map((activity, index) => (
+                <div key={index} className="p-6 hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <div className={`p-2 rounded-lg ${
+                        activity.type === 'home' ? 'bg-purple-50' : 
+                        activity.type === 'academic' ? 'bg-purple-50' : 
+                        activity.type === 'about' ? 'bg-indigo-50' :
+                        activity.type === 'blog' ? 'bg-orange-50' :
+                        'bg-teal-50'
+                      }`}>
+                        {activity.type === 'home' ? (
+                          <Home className="w-5 h-5 text-purple-600" />
+                        ) : activity.type === 'academic' ? (
+                          <GraduationCap className="w-5 h-5 text-purple-600" />
+                        ) : activity.type === 'about' ? (
+                          <Info className="w-5 h-5 text-indigo-600" />
+                        ) : activity.type === 'blog' ? (
+                          <BookOpen className="w-5 h-5 text-orange-600" />
+                        ) : activity.type === 'careers' ? (
+                          <Briefcase className="w-5 h-5 text-teal-600" />
+                        ) : activity.type === 'contact' ? (
+                          <Mail className="w-5 h-5 text-orange-600" />
+                        ) : (
+                          <HelpCircle className="w-5 h-5 text-blue-600" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          {activity.section.charAt(0).toUpperCase() + activity.section.slice(1)} Section
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {activity.type === 'home' ? 'Home Page' : 
+                           activity.type === 'academic' ? 'Academic Page' : 
+                           activity.type === 'about' ? 'About Page' :
+                           activity.type === 'blog' ? 'Blog Page' :
+                           activity.type === 'careers' ? 'Careers Page' :
+                           activity.type === 'contact' ? 'Contact Page' :
+                           'FAQ Page'} • {activity.language.toUpperCase()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <span className={`px-3 py-1 text-xs font-medium rounded-full ${
+                        activity.status === 'published'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-yellow-100 text-yellow-800'
+                      }`}>
+                        {activity.status}
+                      </span>
+                      <div className="flex items-center space-x-2 text-sm text-gray-500">
+                        <Clock className="w-4 h-4" />
+                        <span>{new Date(activity.updatedAt).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="p-12 text-center">
+              <Clock className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-500">No recent activity</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Help Section */}
+      <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-8 border border-gray-200">
+        <div className="flex items-start space-x-4">
+          <div className="p-3 bg-white rounded-lg shadow-sm">
+            <Users className="w-6 h-6 text-gray-600" />
+          </div>
+          <div className="flex-1">
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Need Help?</h3>
+            <p className="text-gray-600 mb-4">
+              Check out our documentation or contact support for assistance with the CMS.
+            </p>
+            <div className="flex space-x-3">
+              <button className="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium shadow-sm">
+                View Docs
+              </button>
+              <button className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium">
+                Contact Support
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

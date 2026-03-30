@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/src/assets/ethronics-CWA0oynF.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ethronics - Technology Education & Innovation in Ethiopia</title>
+    <meta name="description" content="Ethronics is pioneering transformative solutions across education, manufacturing, and global technology, rooted in Ethiopian innovation for worldwide impact. Join our robotics and AI programs." />
+    <meta name="keywords" content="Ethronics, Ethiopia, robotics, AI, technology education, innovation, manufacturing, research, development" />
+    <meta property="og:title" content="Ethronics - Technology Education & Innovation in Ethiopia" />
+    <meta property="og:description" content="Empowering the next generation of innovators through cutting-edge education, research, and manufacturing excellence." />
+    <meta property="og:image" content="/src/assets/ethronics-CWA0oynF.png" />
+    <meta property="og:url" content="https://ethronics.com" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <script>
+      // Ensure light mode by default
+      document.documentElement.classList.remove('dark');
+      // Only apply dark mode if explicitly saved
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

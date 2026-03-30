@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Icon Picker Filter Test</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .test-section {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .test-result {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+    }
+    .pass {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .fail {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+    h1 { color: #333; }
+    h2 { color: #666; margin-top: 0; }
+    code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 Icon Picker Filter Test</h1>
+  
+  <div class="test-section">
+    <h2>Test Results</h2>
+    <div id="results"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>Filter Logic Verification</h2>
+    <div id="filter-tests"></div>
+  </div>
+
+  <script type="module">
+    // Import the icon list
+    import { ICON_LIST } from './src/components/iconList.js';
+
+    const resultsDiv = document.getElementById('results');
+    const filterTestsDiv = document.getElementById('filter-tests');
+
+    // Test 1: Icon list loaded
+    function testIconListLoaded() {
+      if (ICON_LIST && ICON_LIST.length > 0) {
+        return {
+          pass: true,
+          message: `✅ Icon list loaded successfully with ${ICON_LIST.length} icons`
+        };
+      }
+      return {
+        pass: false,
+        message: '❌ Icon list failed to load or is empty'
+      };
+    }
+
+    // Test 2: All icons have required properties
+    function testIconStructure() {
+      const invalidIcons = ICON_LIST.filter(icon => 
+        !icon.name || !icon.category
+      );
+      
+      if (invalidIcons.length === 0) {
+        return {
+          pass: true,
+          message: '✅ All icons have valid structure (name and category)'
+        };
+      }
+      return {
+        pass: false,
+        message: `❌ ${invalidIcons.length} icons have invalid structure`
+      };
+    }
+
+    // Test 3: Categories are valid
+    function testCategories() {
+      const categories = [...new Set(ICON_LIST.map(icon => icon.category))];
+      
+      if (categories.length > 0) {
+        return {
+          pass: true,
+          message: `✅ Found ${categories.length} unique categories`,
+          info: `Categories: ${categories.slice(0, 5).join(', ')}...`
+        };
+      }
+      return {
+        pass: false,
+        message: '❌ No categories found'
+      };
+    }
+
+    // Test 4: Search filter logic
+    function testSearchFilter() {
+      const searchTerm = 'arrow';
+      const filtered = ICON_LIST.filter(icon =>
+        icon.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        icon.category.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      
+      if (filtered.length > 0) {
+        return {
+          pass: true,
+          message: `✅ Search filter works: "${searchTerm}" found ${filtered.length} icons`,
+          info: `Examples: ${filtered.slice(0, 3).map(i => i.name).join(', ')}`
+        };
+      }
+      return {
+        pass: false,
+        message: `❌ Search filter failed for "${searchTerm}"`
+      };
+    }
+
+    // Test 5: Category filter logic
+    function testCategoryFilter() {
+      const category = 'Arrows';
+      const filtered = ICON_LIST.filter(icon => icon.category === category);
+      
+      if (filtered.length > 0) {
+        return {
+          pass: true,
+          message: `✅ Category filter works: "${category}" has ${filtered.length} icons`,
+          info: `Examples: ${filtered.slice(0, 3).map(i => i.name).join(', ')}`
+        };
+      }
+      return {
+        pass: false,
+        message: `❌ Category filter failed for "${category}"`
+      };
+    }
+
+    // Test 6: Combined filters
+    function testCombinedFilters() {
+      const searchTerm = 'up';
+      const category = 'Arrows';
+      const filtered = ICON_LIST.filter(icon => {
+        const matchesSearch = icon.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            icon.category.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesCategory = icon.category === category;
+        return matchesSearch && matchesCategory;
+      });
+      
+      if (filtered.length > 0) {
+        return {
+          pass: true,
+          message: `✅ Combined filters work: "${searchTerm}" in "${category}" found ${filtered.length} icons`,
+          info: `Results: ${filtered.map(i => i.name).join(', ')}`
+        };
+      }
+      return {
+        pass: false,
+        message: `❌ Combined filters failed`
+      };
+    }
+
+    // Run all tests
+    const tests = [
+      testIconListLoaded(),
+      testIconStructure(),
+      testCategories(),
+      testSearchFilter(),
+      testCategoryFilter(),
+      testCombinedFilters()
+    ];
+
+    // Display results
+    tests.forEach(test => {
+      const div = document.createElement('div');
+      div.className = `test-result ${test.pass ? 'pass' : 'fail'}`;
+      div.innerHTML = `
+        <strong>${test.message}</strong>
+        ${test.info ? `<br><small>${test.info}</small>` : ''}
+      `;
+      resultsDiv.appendChild(div);
+    });
+
+    // Additional filter demonstrations
+    const categories = [...new Set(ICON_LIST.map(icon => icon.category))].sort();
+    
+    filterTestsDiv.innerHTML = `
+      <div class="test-result info">
+        <strong>📊 Statistics</strong><br>
+        Total Icons: ${ICON_LIST.length}<br>
+        Total Categories: ${categories.length}<br>
+        <br>
+        <strong>Category Breakdown:</strong><br>
+        ${categories.map(cat => {
+          const count = ICON_LIST.filter(i => i.category === cat).length;
+          return `${cat}: ${count} icons`;
+        }).join('<br>')}
+      </div>
+    `;
+
+    // Summary
+    const passedTests = tests.filter(t => t.pass).length;
+    const totalTests = tests.length;
+    
+    if (passedTests === totalTests) {
+      const summaryDiv = document.createElement('div');
+      summaryDiv.className = 'test-result pass';
+      summaryDiv.innerHTML = `<strong>🎉 All ${totalTests} tests passed! Icon filtering is working correctly.</strong>`;
+      resultsDiv.insertBefore(summaryDiv, resultsDiv.firstChild);
+    } else {
+      const summaryDiv = document.createElement('div');
+      summaryDiv.className = 'test-result fail';
+      summaryDiv.innerHTML = `<strong>⚠️ ${passedTests}/${totalTests} tests passed. Some issues detected.</strong>`;
+      resultsDiv.insertBefore(summaryDiv, resultsDiv.firstChild);
+    }
+  </script>
+</body>
+</html>

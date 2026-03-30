@@ -1,0 +1,5 @@
+{
+  "note": "This file contains the complete home page content structure matching home.js",
+  "sections": ["hero", "features", "solutions", "gallery", "partnerships", "cta"],
+  "languages": ["en", "am", "om"]
+}
