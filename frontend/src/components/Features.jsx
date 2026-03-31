@@ -28,7 +28,8 @@ const FeatureCard = memo(({ feature, index, activeIndex, setActiveIndex, isMobil
 
   const handleLearnMore = (e) => {
     e.stopPropagation();
-    console.log(`Clicked Learn More for ${feature.title}`);
+    // Navigate to feature detail page
+    window.location.href = `/feature/${index}`;
   };
 
   return (
@@ -118,7 +119,7 @@ const FeatureCard = memo(({ feature, index, activeIndex, setActiveIndex, isMobil
 
           {/* Learn More Button */}
           <a
-            href={feature.link || `/research/${index}`}
+            href={`/feature/${index}`}
             className="inline-block px-4 py-2 text-base font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-purple-400"
             aria-label={`Learn more about ${feature.title}`}
             tabIndex={0}

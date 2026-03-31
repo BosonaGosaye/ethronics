@@ -18,6 +18,7 @@ import NewsEvents from './pages/NewsEvents';
 import Blog from './pages/Blog';
 import BlogPostDetail from './pages/BlogPostDetail';
 import FAQ from './pages/FAQ';
+import FeatureDetail from './pages/FeatureDetail';
 
 
 // Layout component that conditionally renders navbar and footer
@@ -66,6 +67,7 @@ function App() {
           
           {/* Main Routes */}
           <Route path="/" element={<Layout><Home /></Layout>} />
+          <Route path="/feature/:featureId" element={<Layout><FeatureDetail /></Layout>} />
           <Route path="/manufacturing" element={<Layout><Manufacturing /></Layout>} />
           <Route path="/academics" element={<Layout><Academics /></Layout>} />
           <Route path="/contact" element={<Layout><Contact /></Layout>} />

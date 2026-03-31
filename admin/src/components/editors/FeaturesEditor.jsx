@@ -109,20 +109,105 @@ export default function FeaturesEditor({ contentByLanguage, currentLanguage, onC
                     onChange={(iconName) => updateItem(index, 'icon', iconName)}
                   />
                 )}
-                <input
-                  type="text"
-                  value={item.title || ''}
-                  onChange={(e) => updateItem(index, 'title', e.target.value)}
-                  placeholder="Title"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                />
-                <textarea
-                  value={item.description || ''}
-                  onChange={(e) => updateItem(index, 'description', e.target.value)}
-                  placeholder="Description"
-                  rows={2}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                />
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                  <input
+                    type="text"
+                    value={item.title || ''}
+                    onChange={(e) => updateItem(index, 'title', e.target.value)}
+                    placeholder="Feature title"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Short Description (for card)</label>
+                  <textarea
+                    value={item.description || ''}
+                    onChange={(e) => updateItem(index, 'description', e.target.value)}
+                    placeholder="Brief description shown on card"
+                    rows={2}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                  />
+                </div>
+                
+                {/* Detail Page Content */}
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <h4 className="text-sm font-semibold text-gray-700 mb-3">Detail Page Content</h4>
+                  
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Detailed Description</label>
+                      <textarea
+                        value={item.detailedDescription || ''}
+                        onChange={(e) => updateItem(index, 'detailedDescription', e.target.value)}
+                        placeholder="Full description for detail page"
+                        rows={4}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Benefits (one per line)</label>
+                      <textarea
+                        value={(item.benefits || []).join('\n')}
+                        onChange={(e) => updateItem(index, 'benefits', e.target.value.split('\n').filter(b => b.trim()))}
+                        placeholder="Key benefit 1&#10;Key benefit 2&#10;Key benefit 3"
+                        rows={4}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Applications (one per line)</label>
+                      <textarea
+                        value={(item.applications || []).join('\n')}
+                        onChange={(e) => updateItem(index, 'applications', e.target.value.split('\n').filter(a => a.trim()))}
+                        placeholder="Application area 1&#10;Application area 2&#10;Application area 3"
+                        rows={3}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Technical Details</label>
+                      <textarea
+                        value={item.technicalDetails || ''}
+                        onChange={(e) => updateItem(index, 'technicalDetails', e.target.value)}
+                        placeholder="Technical specifications and details"
+                        rows={4}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+
+                    {currentLanguage === 'en' && (
+                      <>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Category (Shared)</label>
+                          <input
+                            type="text"
+                            value={item.category || ''}
+                            onChange={(e) => updateItem(index, 'category', e.target.value)}
+                            placeholder="e.g., AI & Machine Learning"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Status (Shared)</label>
+                          <select
+                            value={item.status || 'Active'}
+                            onChange={(e) => updateItem(index, 'status', e.target.value)}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                          >
+                            <option value="Active">Active</option>
+                            <option value="In Development">In Development</option>
+                            <option value="Coming Soon">Coming Soon</option>
+                          </select>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           ))}
