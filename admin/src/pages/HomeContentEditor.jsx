@@ -118,16 +118,28 @@ export default function HomeContentEditor() {
     const newIds = {};
 
     try {
-      // Fetch content for all languages
+      // Fetch content for all languages using admin endpoint
       for (const lang of LANGUAGES) {
         try {
-          const response = await axios.get(`/home/${lang.code}/${section}`);
-          newContent[lang.code] = response.data.data;
-          newPublishStatus[lang.code] = response.data.data.isPublished || false;
-          newIds[lang.code] = response.data.data._id;
-        } catch (error) {
-          if (error.response?.status === 404) {
+          // Use admin endpoint to get full document with metadata
+          const response = await axios.get(`/home/admin/${lang.code}`);
+          
+          // Find the section in the response
+          const sectionData = response.data.data.find(item => item.section === section);
+          
+          if (sectionData) {
+            newContent[lang.code] = sectionData.content;
+            newPublishStatus[lang.code] = sectionData.isPublished || false;
+            newIds[lang.code] = sectionData._id;
+          } else {
             // Section doesn't exist yet, create default content structure
+            newContent[lang.code] = getDefaultContent(section);
+            newPublishStatus[lang.code] = false;
+            newIds[lang.code] = null;
+          }
+        } catch (error) {
+          if (error.response?.status === 404 || error.response?.status === 401) {
+            // Section doesn't exist yet or not authenticated, create default content structure
             newContent[lang.code] = getDefaultContent(section);
             newPublishStatus[lang.code] = false;
             newIds[lang.code] = null;

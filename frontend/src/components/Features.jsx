@@ -113,9 +113,16 @@ const FeatureCard = memo(({ feature, index, activeIndex, setActiveIndex, isMobil
           </div>
 
           {/* Modal Content */}
-          <p className="text-base sm:text-lg text-gray-700 dark:text-gray-200 mb-6 leading-relaxed">
+          <p className="text-base sm:text-lg text-gray-700 dark:text-gray-200 mb-4 leading-relaxed">
             {feature.details || feature.description}
           </p>
+
+          {/* Modal Description */}
+          {feature.modalDescription && (
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mb-6 leading-relaxed italic border-l-4 border-purple-500 pl-4 py-2 bg-purple-50 dark:bg-purple-900/20 rounded-r">
+              {feature.modalDescription}
+            </p>
+          )}
 
           {/* Learn More Button */}
           <a
@@ -196,6 +203,7 @@ const Features = ({ content }) => {
     icon: item.icon || 'Lightbulb', // Use icon name from backend
     title: item.title,
     description: item.description,
+    modalDescription: content.modalDescription || '',
     learnMoreText: content.learnMore || 'Learn More'
   }));
 
