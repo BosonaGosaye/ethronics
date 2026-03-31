@@ -52,8 +52,17 @@ export const AuthProvider = ({ children }) => {
         setToken(token);
         setUser(user);
         
-        // Set token in both axios defaults and instance headers
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        // Set token in axios defaults AND instance
+        const authHeader = `Bearer ${token}`;
+        axios.defaults.headers.common['Authorization'] = authHeader;
+        
+        // Also set it directly on the axios instance
+        if (axios.defaults.headers) {
+          axios.defaults.headers.common = axios.defaults.headers.common || {};
+          axios.defaults.headers.common['Authorization'] = authHeader;
+        }
+        
+        console.log('Token set:', authHeader); // Debug log
         
         return { success: true };
       } else {
