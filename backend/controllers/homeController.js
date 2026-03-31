@@ -1,6 +1,7 @@
 const HomeContent = require('../models/HomeContent');
 const { validateLanguage, validateSection, validateContent } = require('../utils/validators');
 const { logActivity } = require('../middleware/activityLogger');
+const { getContentWithImageFallback } = require('../utils/imageFallback');
 
 // @desc    Get all published content for a language
 // @route   GET /api/home/:language
@@ -18,16 +19,7 @@ exports.getPublishedContent = async (req, res, next) => {
       });
     }
 
-    const content = await HomeContent.find({
-      language,
-      isPublished: true
-    }).select('-__v -updatedBy');
-
-    // Transform array to object with sections as keys (matching home.js structure)
-    const contentObj = {};
-    content.forEach(item => {
-      contentObj[item.section] = item.content;
-    });
+    const contentObj = await getContentWithImageFallback(HomeContent, language);
 
     res.json({
       success: true,
