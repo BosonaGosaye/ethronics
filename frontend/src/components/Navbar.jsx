@@ -55,7 +55,7 @@ const Navbar = () => {
             <Link to="/" className="text-xl lg:text-2xl font-bold text-white">
               <div className="flex items-center space-x-2">
                 <img 
-                  src="/src/assets/ethronics-CWA0oynF.png" 
+                  src="/logo.png" 
                   alt="Ethronics Logo" 
                   className="h-8 w-auto lg:h-10 xl:h-12"
                 />
@@ -111,7 +111,7 @@ const Navbar = () => {
           <Link to="/" className="text-xl font-bold text-white">
             <div className="flex items-end space-x-2">
               <img 
-                src="/src/assets/ethronics-CWA0oynF.png" 
+                src="/logo.png" 
                 alt="Ethronics Logo" 
                 className="h-8 w-auto"
               />

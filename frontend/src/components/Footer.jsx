@@ -61,7 +61,7 @@ const Footer = () => {
           <div className="space-y-4 text-center sm:text-left">
             <Link to="/" className="flex items-center justify-center sm:justify-start space-x-2">
               <img 
-                src="/src/assets/ethronics-CWA0oynF.png" 
+                src="/logo.png" 
                 alt="Ethronics Logo" 
                 className="h-8 sm:h-10 w-auto"
               />
