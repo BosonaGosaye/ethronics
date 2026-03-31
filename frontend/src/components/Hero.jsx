@@ -204,9 +204,6 @@ const HeroCarousel = ({ slides, buttons = [], badge, className = "" }) => {
                 style={{
                   filter: 'drop-shadow(0 25px 50px rgba(0,0,0,0.5))'
                 }}
-                onError={(e) => {
-                  e.target.src = "https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80";
-                }}
               />
             ))}
           </div>
