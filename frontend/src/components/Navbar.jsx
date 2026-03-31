@@ -5,10 +5,14 @@ import ThemeToggle from './ThemeToggle';
 import LanguageSelector from './LanguageSelector';
 import { useLanguage } from '../contexts/LanguageContext';
 import { navigationTranslations } from '../translations/navigation';
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [logo, setLogo] = useState('/logo.png');
   const location = useLocation();
   const { language } = useLanguage();
   
@@ -16,6 +20,7 @@ const Navbar = () => {
   const t = navigationTranslations[language] || navigationTranslations.en;
 
   useEffect(() => {
+    fetchLogo();
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
@@ -23,6 +28,17 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const fetchLogo = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/site-settings`);
+      if (response.data.data.logo) {
+        setLogo(response.data.data.logo);
+      }
+    } catch (error) {
+      console.error('Error fetching logo:', error);
+    }
+  };
 
   const isActive = (path) => location.pathname === path;
 
@@ -55,9 +71,10 @@ const Navbar = () => {
             <Link to="/" className="text-xl lg:text-2xl font-bold text-white">
               <div className="flex items-center space-x-2">
                 <img 
-                  src="/logo.png" 
+                  src={logo} 
                   alt="Ethronics Logo" 
                   className="h-8 w-auto lg:h-10 xl:h-12"
+                  onError={(e) => { e.target.src = '/logo.png'; }}
                 />
                 <span className="hidden sm:inline">Ethronics</span>
               </div>
@@ -111,9 +128,10 @@ const Navbar = () => {
           <Link to="/" className="text-xl font-bold text-white">
             <div className="flex items-end space-x-2">
               <img 
-                src="/logo.png" 
+                src={logo} 
                 alt="Ethronics Logo" 
                 className="h-8 w-auto"
+                onError={(e) => { e.target.src = '/logo.png'; }}
               />
               <span>Ethronics</span>
             </div>

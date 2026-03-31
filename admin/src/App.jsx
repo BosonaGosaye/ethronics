@@ -48,6 +48,7 @@ import RegisterContentEditor from './pages/RegisterContentEditor';
 import RegistrationsManager from './pages/RegistrationsManager';
 import RegistrationViewer from './pages/RegistrationViewer';
 import ResearchDashboard from './pages/ResearchDashboard';
+import SiteSettings from './pages/SiteSettings';
 import ResearchContentEditor from './pages/ResearchContentEditor';
 import ResearchProjectsManager from './pages/ResearchProjectsManager';
 import ResearchProjectEditor from './pages/ResearchProjectEditor';
@@ -186,6 +187,7 @@ function App() {
             <Route path="users/:id" element={<UserEditor />} />
             <Route path="users/:userId/activities" element={<UserActivities />} />
             <Route path="activities" element={<ActivityDashboard />} />
+            <Route path="settings" element={<SiteSettings />} />
           </Route>
           {/* Catch all unknown routes */}
           <Route path="*" element={<Navigate to="/login" replace />} />

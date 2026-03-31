@@ -1,17 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigationContent } from '../hooks/useNavigationContent';
 import { navigationTranslations } from '../translations/navigation';
 import { Mail, Phone, MapPin, X } from 'lucide-react';
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
 const Footer = () => {
   const { language } = useLanguage();
   const { content } = useNavigationContent(language);
   const [showMapModal, setShowMapModal] = useState(false);
+  const [logo, setLogo] = useState('/logo.png');
   
   // Use local translations for UI text
   const t = navigationTranslations[language] || navigationTranslations.en;
+
+  useEffect(() => {
+    fetchLogo();
+  }, []);
+
+  const fetchLogo = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/site-settings`);
+      if (response.data.data.logo) {
+        setLogo(response.data.data.logo);
+      }
+    } catch (error) {
+      console.error('Error fetching logo:', error);
+    }
+  };
   
   // Get contact details from backend, fallback to translations
   const contactInfo = {
@@ -61,9 +80,10 @@ const Footer = () => {
           <div className="space-y-4 text-center sm:text-left">
             <Link to="/" className="flex items-center justify-center sm:justify-start space-x-2">
               <img 
-                src="/logo.png" 
+                src={logo} 
                 alt="Ethronics Logo" 
                 className="h-8 sm:h-10 w-auto"
+                onError={(e) => { e.target.src = '/logo.png'; }}
               />
               <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
                 Ethronics

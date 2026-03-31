@@ -53,6 +53,7 @@ app.use('/uploads', express.static('uploads'));
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
+app.use('/api/site-settings', require('./routes/siteSettings'));
 app.use('/api/home', require('./routes/home'));
 app.use('/api/academic', require('./routes/academic'));
 app.use('/api/academic-sections', require('./routes/academicSection'));
