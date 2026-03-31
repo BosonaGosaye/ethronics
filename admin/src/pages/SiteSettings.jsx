@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import axios from '../utils/axios';
-import { Save, Upload, Image as ImageIcon } from 'lucide-react';
-import MediaUploader from '../components/MediaUploader';
+import { Save, Upload } from 'lucide-react';
+import MediaLibrary from '../components/MediaLibrary';
 
 export default function SiteSettings() {
   const [settings, setSettings] = useState({ logo: '', siteName: 'Ethronics' });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
-  const [showMediaUploader, setShowMediaUploader] = useState(false);
+  const [showMediaLibrary, setShowMediaLibrary] = useState(false);
 
   useEffect(() => {
     fetchSettings();
@@ -41,7 +41,7 @@ export default function SiteSettings() {
 
   const handleMediaSelect = (media) => {
     setSettings({ ...settings, logo: media.url });
-    setShowMediaUploader(false);
+    setShowMediaLibrary(false);
   };
 
   if (loading) return <div className="p-8">Loading...</div>;
@@ -59,7 +59,7 @@ export default function SiteSettings() {
               <img src={settings.logo} alt="Logo" className="h-16 w-auto" />
             )}
             <button
-              onClick={() => setShowMediaUploader(true)}
+              onClick={() => setShowMediaLibrary(true)}
               className="flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
             >
               <Upload className="w-4 h-4" />
@@ -97,12 +97,12 @@ export default function SiteSettings() {
         </div>
       </div>
 
-      {showMediaUploader && (
-        <MediaUploader
-          onSelect={handleMediaSelect}
-          onClose={() => setShowMediaUploader(false)}
-        />
-      )}
+      <MediaLibrary
+        isOpen={showMediaLibrary}
+        onClose={() => setShowMediaLibrary(false)}
+        onSelect={handleMediaSelect}
+        type="image"
+      />
     </div>
   );
 }

@@ -1,19 +1,20 @@
 import { useState, useEffect } from 'react';
-import { X, Search, Image as ImageIcon, Loader } from 'lucide-react';
+import { X, Search, Image as ImageIcon, Loader, Upload } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function MediaLibrary({ isOpen, onClose, onSelect, type = 'image' }) {
   const { token } = useAuth();
   const [media, setMedia] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && token) {
       fetchMedia();
     }
-  }, [isOpen, type]);
+  }, [isOpen, type, token]);
 
   const fetchMedia = async () => {
     setLoading(true);
@@ -50,6 +51,43 @@ export default function MediaLibrary({ isOpen, onClose, onSelect, type = 'image'
     }
   };
 
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+      const response = await fetch(`${API_URL}/media/upload-image`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Upload failed');
+      }
+
+      // Refresh media list
+      await fetchMedia();
+      
+      // Auto-select the newly uploaded image
+      setSelectedItem(data.data);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      alert('Upload failed: ' + error.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -66,17 +104,30 @@ export default function MediaLibrary({ isOpen, onClose, onSelect, type = 'image'
           </button>
         </div>
 
-        {/* Search */}
+        {/* Search and Upload */}
         <div className="p-6 border-b">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search media..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-            />
+          <div className="flex space-x-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search media..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+              />
+            </div>
+            <label className="flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 cursor-pointer">
+              <Upload className="w-4 h-4" />
+              <span>{uploading ? 'Uploading...' : 'Upload New'}</span>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileUpload}
+                disabled={uploading}
+                className="hidden"
+              />
+            </label>
           </div>
         </div>
 
