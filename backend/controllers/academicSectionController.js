@@ -1,4 +1,5 @@
 const AcademicSection = require('../models/AcademicSection');
+const { getContentWithImageFallback, getSectionWithImageFallback } = require('../utils/imageFallback');
 
 // @desc    Get all published sections for a language
 // @route   GET /api/academic/:language
@@ -14,16 +15,7 @@ exports.getPublishedSections = async (req, res) => {
       });
     }
 
-    const sections = await AcademicSection.find({
-      language,
-      isPublished: true
-    }).select('-__v -updatedBy');
-
-    // Transform array to object with sections as keys
-    const contentObj = {};
-    sections.forEach(item => {
-      contentObj[item.section] = item.content;
-    });
+    const contentObj = await getContentWithImageFallback(AcademicSection, language);
 
     res.json({
       success: true,
@@ -35,6 +27,7 @@ exports.getPublishedSections = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error fetching academic content',
+      data: {},
       error: error.message
     });
   }
@@ -73,28 +66,26 @@ exports.getSection = async (req, res) => {
   try {
     const { language, section } = req.params;
 
-    const content = await AcademicSection.findOne({
-      language,
-      section,
-      isPublished: true
-    }).select('-__v -updatedBy');
-
-    if (!content) {
-      return res.status(404).json({
+    if (!['en', 'am', 'om'].includes(language)) {
+      return res.status(400).json({
         success: false,
-        message: 'Section not found or not published'
+        message: 'Invalid language. Must be en, am, or om'
       });
     }
 
+    const result = await getSectionWithImageFallback(AcademicSection, language, section);
+
     res.json({
       success: true,
-      data: content.content
+      data: result.data,
+      ...(result.fallback && { fallback: true, message: 'Using English content as fallback' })
     });
   } catch (error) {
     console.error('Error fetching section:', error);
     res.status(500).json({
       success: false,
       message: 'Error fetching section',
+      data: {},
       error: error.message
     });
   }

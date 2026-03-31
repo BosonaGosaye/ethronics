@@ -1,31 +1,24 @@
 const RegisterContent = require('../models/RegisterContent');
+const { getSectionWithImageFallback } = require('../utils/imageFallback');
 
 // Get content for a specific section and language (public - only published)
 exports.getPublicContent = async (req, res) => {
   try {
     const { language, section } = req.params;
     
-    const content = await RegisterContent.findOne({
-      language,
-      section,
-      isPublished: true
-    }).select('-lastModifiedBy -__v');
-
-    if (!content) {
-      return res.status(404).json({
-        success: false,
-        message: 'Content not found'
-      });
-    }
+    const result = await getSectionWithImageFallback(RegisterContent, language, section);
 
     res.json({
       success: true,
-      data: content
+      data: result.data,
+      ...(result.fallback && { fallback: true, message: 'Using English content as fallback' })
     });
   } catch (error) {
+    console.error('Error in getPublicContent:', error);
     res.status(500).json({
       success: false,
       message: 'Server error',
+      data: {},
       error: error.message
     });
   }
