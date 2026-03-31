@@ -58,8 +58,8 @@ const Footer = () => {
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           {/* Logo and Description */}
-          <div className="space-y-4">
-            <Link to="/" className="flex items-center space-x-2">
+          <div className="space-y-4 text-center sm:text-left">
+            <Link to="/" className="flex items-center justify-center sm:justify-start space-x-2">
               <img 
                 src="/src/assets/ethronics-CWA0oynF.png" 
                 alt="Ethronics Logo" 
@@ -75,7 +75,7 @@ const Footer = () => {
           </div>
 
           {/* Navigation Links */}
-          <div>
+          <div className="text-center sm:text-left">
             <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-4">
               {t.navigation}
             </h3>
@@ -94,7 +94,7 @@ const Footer = () => {
           </div>
 
           {/* Company Links */}
-          <div>
+          <div className="text-center sm:text-left">
             <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-4">
               {t.company}
             </h3>
@@ -113,7 +113,7 @@ const Footer = () => {
           </div>
 
           {/* Resource Links */}
-          <div>
+          <div className="text-center sm:text-left">
             <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-4">
               {t.resources}
             </h3>
@@ -136,15 +136,15 @@ const Footer = () => {
         <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             {/* Contact Information */}
-            <div>
+            <div className="text-center sm:text-left">
               <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 {t.contactUs}
               </h3>
               <ul className="space-y-3 text-gray-600 dark:text-gray-400 text-sm">
                 {/* Email - Clickable */}
-                <li className="flex items-start space-x-2">
+                <li className="flex items-start justify-center sm:justify-start space-x-2">
                   <Mail className="w-4 h-4 mt-0.5 flex-shrink-0 text-purple-600 dark:text-purple-400" />
-                  <div>
+                  <div className="text-left">
                     <span className="block text-xs text-gray-500 dark:text-gray-500">{t.email}</span>
                     <a 
                       href={`mailto:${contactInfo.email}`}
@@ -156,9 +156,9 @@ const Footer = () => {
                 </li>
 
                 {/* Phone - Clickable */}
-                <li className="flex items-start space-x-2">
+                <li className="flex items-start justify-center sm:justify-start space-x-2">
                   <Phone className="w-4 h-4 mt-0.5 flex-shrink-0 text-purple-600 dark:text-purple-400" />
-                  <div>
+                  <div className="text-left">
                     <span className="block text-xs text-gray-500 dark:text-gray-500">{t.phone}</span>
                     <a 
                       href={`tel:${contactInfo.phone.replace(/[^0-9+]/g, '')}`}
@@ -170,9 +170,9 @@ const Footer = () => {
                 </li>
 
                 {/* Address - Clickable (opens map) */}
-                <li className="flex items-start space-x-2">
+                <li className="flex items-start justify-center sm:justify-start space-x-2">
                   <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-purple-600 dark:text-purple-400" />
-                  <div>
+                  <div className="text-left">
                     <span className="block text-xs text-gray-500 dark:text-gray-500">{t.address}</span>
                     <button
                       onClick={() => setShowMapModal(true)}
@@ -186,11 +186,11 @@ const Footer = () => {
             </div>
 
             {/* Social Media Links */}
-            <div>
+            <div className="text-center sm:text-left">
               <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 {t.followUs}
               </h3>
-              <div className="flex space-x-4">
+              <div className="flex justify-center sm:justify-start space-x-4">
                 {/* Twitter/X */}
                 <a
                   href="#"
