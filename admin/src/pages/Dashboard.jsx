@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../utils/axios';
 import { 
   Home, GraduationCap, FileText, TrendingUp, Users, 
   Globe, Clock, CheckCircle, AlertCircle, ArrowRight, Info, BookOpen, Briefcase, Mail, HelpCircle, Library, Factory 
@@ -28,7 +28,6 @@ export default function Dashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const token = localStorage.getItem('token');
       const defaultStats = { total: 0, published: 0, draft: 0 };
       
       // Initialize all stats with defaults
@@ -45,9 +44,7 @@ export default function Dashboard() {
       // Fetch home content stats
       let homeData = [];
       try {
-        const homeResponse = await axios.get(`${API_URL}/home/admin/en`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const homeResponse = await axios.get('/home/admin/en');
         homeData = homeResponse.data.data || [];
         homeStats = {
           total: homeData.length,
@@ -61,9 +58,7 @@ export default function Dashboard() {
       // Fetch academic content stats
       let academicData = [];
       try {
-        const academicResponse = await axios.get(`${API_URL}/academic-sections/admin/en`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const academicResponse = await axios.get('/academic-sections/admin/en');
         academicData = academicResponse.data.data || [];
         academicStats = {
           total: academicData.length,
@@ -77,9 +72,7 @@ export default function Dashboard() {
       // Fetch about content stats
       let aboutData = [];
       try {
-        const aboutResponse = await axios.get(`${API_URL}/about/admin/en`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const aboutResponse = await axios.get('/about/admin/en');
         aboutData = aboutResponse.data.data || [];
         aboutStats = {
           total: aboutData.length,
@@ -93,9 +86,7 @@ export default function Dashboard() {
       // Fetch blog content stats
       let blogData = [];
       try {
-        const blogResponse = await axios.get(`${API_URL}/blog/admin/en`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const blogResponse = await axios.get('/blog/admin/en');
         blogData = blogResponse.data.data || [];
         blogStats = {
           total: blogData.length,
@@ -109,9 +100,7 @@ export default function Dashboard() {
       // Fetch careers content stats
       let careersData = [];
       try {
-        const careersResponse = await axios.get(`${API_URL}/careers/admin/en`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const careersResponse = await axios.get('/careers/admin/en');
         careersData = careersResponse.data.data || [];
         careersStats = {
           total: careersData.length,
@@ -125,9 +114,7 @@ export default function Dashboard() {
       // Fetch contact content stats
       let contactData = [];
       try {
-        const contactResponse = await axios.get(`${API_URL}/contact/admin/en`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const contactResponse = await axios.get('/contact/admin/en');
         contactData = contactResponse.data.data || [];
         contactStats = {
           total: contactData.length,
@@ -141,9 +128,7 @@ export default function Dashboard() {
       // Fetch FAQ content stats
       let faqData = [];
       try {
-        const faqResponse = await axios.get(`${API_URL}/faq/admin/en`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const faqResponse = await axios.get('/faq/admin/en');
         faqData = faqResponse.data.data || [];
         faqStats = {
           total: faqData.length,
@@ -157,9 +142,7 @@ export default function Dashboard() {
       // Fetch library content stats
       let libraryData = [];
       try {
-        const libraryResponse = await axios.get(`${API_URL}/library/admin/en`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const libraryResponse = await axios.get('/library/admin/en');
         libraryData = libraryResponse.data.data || [];
         libraryStats = {
           total: libraryData.length,
