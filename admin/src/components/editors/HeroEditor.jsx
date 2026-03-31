@@ -46,7 +46,7 @@ export default function HeroEditor({ contentByLanguage, currentLanguage, onConte
 
   const getSlides = () => {
     return Object.keys(content)
-      .filter(key => key.tsWith('slide'))
+      .filter(key => key.startsWith('slide'))
       .sort((a, b) => {
         const numA = parseInt(a.replace('slide', ''));
         const numB = parseInt(b.replace('slide', ''));
