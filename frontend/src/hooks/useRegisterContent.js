@@ -21,10 +21,14 @@ export const useRegisterContent = (language = 'en') => {
         const sections = ['hero', 'objective', 'highlights', 'form', 'faq', 'gallery', 'nextSteps', 'cta'];
         const sectionPromises = sections.map(section =>
           axios.get(`${BASE_URL}/register/public/${language}/${section}`)
-            .then(res => ({ section, data: res.data.data.content }))
+            .then(res => ({ 
+              section, 
+              // After the fix, API returns data directly (not data.content)
+              data: res.data.data || {} 
+            }))
             .catch(err => {
               console.warn(`Failed to fetch ${section}:`, err.message);
-              return { section, data: null };
+              return { section, data: {} };
             })
         );
 
