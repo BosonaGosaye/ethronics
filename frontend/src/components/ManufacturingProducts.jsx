@@ -67,7 +67,7 @@ const ManufacturingProducts = ({ content }) => {
                   alt={product.name}
                   className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                   onError={(e) => {
-                    e.target.src = 'https://images.unsplash.com/photo-1567789884554-0b844b597180?w=400&auto=format&fit=crop&q=60'
+                    e.target.src = ''
                   }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
@@ -123,7 +123,7 @@ const ManufacturingProducts = ({ content }) => {
                 alt={selectedProduct.name}
                 className="w-full h-64 object-cover rounded-t-2xl"
                 onError={(e) => {
-                  e.target.src = 'https://images.unsplash.com/photo-1567789884554-0b844b597180?w=800&auto=format&fit=crop&q=60'
+                  e.target.src = ''
                 }}
               />
               <button

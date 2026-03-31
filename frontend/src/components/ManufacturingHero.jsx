@@ -22,7 +22,7 @@ const ManufacturingHero = ({ content }) => {
       </>
     ),
     description: slide.description,
-    image: slide.image || "https://images.unsplash.com/photo-1647427060118-4911c9821b82?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFudWZhY3R1cmV8ZW58MHx8MHx8fDA%3D"
+    image: slide.image || ""
   }));
 
   const buttons = content.buttons || [

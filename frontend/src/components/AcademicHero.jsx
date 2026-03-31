@@ -29,7 +29,7 @@ const AcademicHero = ({ content }) => {
         slide.title?.full || slide.title || ''
       ),
       description: slide.description,
-      image: slide.image || `https://images.unsplash.com/photo-1572310608276-9134d42f127f?w=1200&auto=format&fit=crop&q=80`
+      image: slide.image || ``
     };
   });
 

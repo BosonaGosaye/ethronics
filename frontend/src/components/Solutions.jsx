@@ -1,23 +1,23 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 
-// Default fallback images
+// Default fallback images - empty to avoid CORS issues
 const defaultImages = {
-  tvet: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=400&q=60',
-  undergrad: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=400&q=60',
-  postgrad: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=400&q=60',
-  training: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=400&q=60',
-  bootcamp: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=400&q=60',
-  aiCurriculum: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=400&q=60',
-  mentor: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=60',
-  scholarship: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=400&q=60',
-  smartGate: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=400&q=60',
-  smartFactory: 'https://images.unsplash.com/photo-1567789884554-0b844b597180?auto=format&fit=crop&w=400&q=60',
-  blockchain: 'https://images.unsplash.com/photo-1639322537228-f710d846310a?auto=format&fit=crop&w=400&q=60',
-  trafficControl: 'https://images.unsplash.com/photo-1584649525122-8d6895492a5d?auto=format&fit=crop&w=400&q=60',
-  quantum: 'https://images.unsplash.com/photo-1591306208574-969f12f1ebfe?auto=format&fit=crop&w=400&q=60',
-  cybersecurity: 'https://images.unsplash.com/photo-1584433144859-1fc3ab64a957?auto=format&fit=crop&w=400&q=60',
-  partnerships: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=400&q=60'
+  tvet: '',
+  undergrad: '',
+  postgrad: '',
+  training: '',
+  bootcamp: '',
+  aiCurriculum: '',
+  mentor: '',
+  scholarship: '',
+  smartGate: '',
+  smartFactory: '',
+  blockchain: '',
+  trafficControl: '',
+  quantum: '',
+  cybersecurity: '',
+  partnerships: ''
 };
 
 const Solutions = ({ content }) => {
@@ -215,8 +215,8 @@ const Solutions = ({ content }) => {
         alt={solution.title}
         className="w-full h-48 object-cover rounded-t-xl"
         onError={(e) => {
-          // Fallback to a default image if the backend image fails to load
-          e.target.src = 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=400&q=60';
+          // Fallback to empty if the backend image fails to load
+          e.target.src = '';
         }}
       />
       <div className="p-6">

@@ -19,7 +19,7 @@ const Courses = () => {
       level: "Beginner",
       duration: "8 weeks",
       price: "$299",
-      image: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&h=250&fit=crop",
+      image: "",
       description: "Master the basics of electronics including circuits, components, and measurements.",
       features: ["Circuit Analysis", "Component Identification", "Hands-on Labs", "Certificate"]
     },
@@ -30,7 +30,7 @@ const Courses = () => {
       level: "Intermediate",
       duration: "6 weeks",
       price: "$249",
-      image: "https://images.unsplash.com/photo-1584433144859-1fc3ab64a957?w=400&h=250&fit=crop",
+      image: "",
       description: "Learn to program Arduino microcontrollers for various projects and applications.",
       features: ["C++ Programming", "Sensor Integration", "Project Building", "Certificate"]
     },
@@ -41,7 +41,7 @@ const Courses = () => {
       level: "Advanced",
       duration: "12 weeks",
       price: "$599",
-      image: "https://images.unsplash.com/photo-1567789884554-0b844b597180?w=400&h=250&fit=crop",
+      image: "",
       description: "Design and build autonomous robots using advanced engineering principles.",
       features: ["Mechanical Design", "Control Systems", "AI Integration", "Certificate"]
     },
@@ -52,7 +52,7 @@ const Courses = () => {
       level: "Intermediate",
       duration: "10 weeks",
       price: "$449",
-      image: "https://images.unsplash.com/photo-1591306208574-969f12f1ebfe?w=400&h=250&fit=crop",
+      image: "",
       description: "Create connected devices and smart systems using IoT technologies.",
       features: ["Cloud Integration", "Wireless Communication", "Data Analytics", "Certificate"]
     },
@@ -63,7 +63,7 @@ const Courses = () => {
       level: "Advanced",
       duration: "8 weeks",
       price: "$399",
-      image: "https://images.unsplash.com/photo-1584649525122-8d6895492a5d?w=400&h=250&fit=crop",
+      image: "",
       description: "Professional PCB design using industry-standard tools and best practices.",
       features: ["Altium Designer", "Signal Integrity", "Manufacturing", "Certificate"]
     },
@@ -74,7 +74,7 @@ const Courses = () => {
       level: "Advanced",
       duration: "14 weeks",
       price: "$699",
-      image: "https://images.unsplash.com/photo-1593642532973-d31b6557fa68?w=400&h=250&fit=crop",
+      image: "",
       description: "Comprehensive embedded systems development from basics to advanced topics.",
       features: ["Real-time OS", "Hardware Interfacing", "Debugging", "Certificate"]
     }

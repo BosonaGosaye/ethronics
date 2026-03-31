@@ -4,7 +4,7 @@ const Testimonials = () => {
       name: "Sarah Johnson",
       role: "Electronics Engineer",
       company: "TechCorp",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+      image: "",
       quote: "Ethronics transformed my career. The hands-on approach and expert instructors gave me the confidence to excel in my field.",
       gradient: "from-blue-500 to-cyan-500"
     },
@@ -12,7 +12,7 @@ const Testimonials = () => {
       name: "Michael Chen",
       role: "IoT Developer",
       company: "SmartDevices Inc",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+      image: "",
       quote: "The practical projects and real-world applications made all the difference. I landed my dream job within 3 months of graduation.",
       gradient: "from-purple-500 to-indigo-500"
     },
@@ -20,7 +20,7 @@ const Testimonials = () => {
       name: "Emily Rodriguez",
       role: "Robotics Specialist",
       company: "AutoTech Solutions",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+      image: "",
       quote: "The comprehensive curriculum and industry connections at Ethronics opened doors I never thought possible.",
       gradient: "from-emerald-500 to-green-500"
     }

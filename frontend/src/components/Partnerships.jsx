@@ -27,7 +27,7 @@ const Partnerships = ({ content }) => {
 
   const keyPartnerships = (content.keyPartnerships || []).map((partner, index) => ({
     ...partner,
-    logo: partner.logo || `https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&w=100&q=80`
+    logo: partner.logo || ``
   }));
 
   return (
@@ -92,8 +92,8 @@ const Partnerships = ({ content }) => {
                       alt={`${partner.name} logo`}
                       className="w-10 h-10 object-contain"
                       onError={(e) => {
-                        // Fallback to a generic partner icon SVG
-                        e.target.src = `https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&w=100&q=80`;
+                        // Fallback to empty
+                        e.target.src = ``;
                       }}
                     />
                   </div>

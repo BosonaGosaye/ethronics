@@ -83,13 +83,9 @@ const FacultyResearch = ({ content }) => {
           </div>
           <div className="relative h-96 rounded-xl overflow-hidden shadow-lg">
             <img 
-              src={content.researchImage || content.worldClassImage || "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=80"}
+              src={content.researchImage || content.worldClassImage || ""}
               alt={content.imageCaption || "Faculty Research"}
               className="w-full h-full object-cover"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=80";
-              }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent flex items-end p-6">
               <p className="text-white text-lg font-semibold">

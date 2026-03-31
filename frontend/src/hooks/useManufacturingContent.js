@@ -54,7 +54,7 @@ export const useManufacturingContent = () => {
             status: product.status || 'In Development',
             progress: product.progress || 0,
             expectedLaunch: product.expectedLaunch || '',
-            image: product.image || 'https://images.unsplash.com/photo-1567789884554-0b844b597180?w=400&auto=format&fit=crop&q=60',
+            image: product.image || '',
             specifications: product.specifications || {},
             isFeatured: product.isFeatured || false,
             isPublished: product.isPublished !== false,

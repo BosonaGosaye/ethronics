@@ -20,13 +20,9 @@ const VisionSection = ({ content }) => {
           </div>
           <div className="relative h-96 rounded-xl overflow-hidden shadow-lg">
             <img 
-              src={content.image || "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80"}
+              src={content.image || ""}
               alt={content.imageCaption || "Vision"}
               className="w-full h-full object-cover"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80";
-              }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent flex items-end p-6">
               <p className="text-white text-lg font-semibold">

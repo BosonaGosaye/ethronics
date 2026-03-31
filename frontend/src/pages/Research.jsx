@@ -88,54 +88,34 @@ const ResearchProjects = ({ content, selectedResearch, setSelectedResearch, lang
       1: {
         main: "/src/assets/Robot-replace-D--cWneY.jpg",
         gallery: [
-          "/src/assets/Robot-replace-D--cWneY.jpg",
-          "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800&auto=format&fit=crop&q=60",
-          "https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=800&auto=format&fit=crop&q=60",
-          "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=800&auto=format&fit=crop&q=60"
+          "/src/assets/Robot-replace-D--cWneY.jpg"
         ]
       },
       2: {
         main: "/src/assets/ai-curriculum-DbYJIUnh.jpg",
         gallery: [
-          "/src/assets/ai-curriculum-DbYJIUnh.jpg",
-          "https://images.unsplash.com/photo-1589254065878-42c9da997008?w=800&auto=format&fit=crop&q=60",
-          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=60",
-          "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop&q=60"
+          "/src/assets/ai-curriculum-DbYJIUnh.jpg"
         ]
       },
       3: {
-        main: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=600&auto=format&fit=crop&q=60",
-        gallery: [
-          "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&auto=format&fit=crop&q=60",
-          "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=60",
-          "https://images.unsplash.com/photo-1563206767-5b18f218e8de?w=800&auto=format&fit=crop&q=60",
-          "https://images.unsplash.com/photo-1639322537228-f710d846310a?w=800&auto=format&fit=crop&q=60"
-        ]
+        main: "",
+        gallery: []
       },
       4: {
-        main: "https://images.unsplash.com/photo-1565514020179-026b92b84bb6?w=600&auto=format&fit=crop&q=60",
+        main: "",
         gallery: [
-          "https://images.unsplash.com/photo-1565514020179-026b92b84bb6?w=800&auto=format&fit=crop&q=60",
-          "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800&auto=format&fit=crop&q=60",
-          "/src/assets/training-xgzfTKXW.jpg",
-          "https://images.unsplash.com/photo-1567789884554-0b844b597180?w=800&auto=format&fit=crop&q=60"
+          "/src/assets/training-xgzfTKXW.jpg"
         ]
       },
       5: {
-        main: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=600&auto=format&fit=crop&q=60",
+        main: "",
         gallery: [
-          "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&auto=format&fit=crop&q=60",
-          "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=800&auto=format&fit=crop&q=60",
-          "https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=800&auto=format&fit=crop&q=60",
           "/src/assets/smart-gate-BuGtJWux.jpg"
         ]
       },
       6: {
-        main: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&auto=format&fit=crop&q=60",
+        main: "",
         gallery: [
-          "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&auto=format&fit=crop&q=60",
-          "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&auto=format&fit=crop&q=60",
-          "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=800&auto=format&fit=crop&q=60",
           "/src/assets/mentor-Cib0Zqml.jpg"
         ]
       }
@@ -154,8 +134,8 @@ const ResearchProjects = ({ content, selectedResearch, setSelectedResearch, lang
     return {
       ...project,
       icon: icons[project.id] || <Bot className="w-6 h-6" />,
-      image: project.image || imagesByProject[project.id]?.main || "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&auto=format&fit=crop&q=60",
-      images: project.images || imagesByProject[project.id]?.gallery || [project.image || "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&auto=format&fit=crop&q=60"],
+      image: project.image || imagesByProject[project.id]?.main || "",
+      images: project.images || imagesByProject[project.id]?.gallery || [project.image || ""],
       status: project.status || staticData[project.id]?.status || "Active",
       duration: project.duration || staticData[project.id]?.duration || "2024",
       team: project.team || staticData[project.id]?.team || []
