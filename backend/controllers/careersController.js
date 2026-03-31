@@ -1,32 +1,25 @@
 // @ts-nocheck
 const CareersContent = require('../models/CareersContent');
+const { getSectionWithImageFallback } = require('../utils/imageFallback');
 
 // Get careers content by language and section
 exports.getCareersContent = async (req, res) => {
   try {
     const { language, section } = req.params;
     
-    const content = await CareersContent.findOne({ 
-      language, 
-      section,
-      isPublished: true 
-    });
-    
-    if (!content) {
-      return res.status(404).json({
-        success: false,
-        message: 'Content not found'
-      });
-    }
+    const result = await getSectionWithImageFallback(CareersContent, language, section);
     
     res.json({
       success: true,
-      data: content.content
+      data: result.data,
+      ...(result.fallback && { fallback: true, message: 'Using English content as fallback' })
     });
   } catch (error) {
+    console.error('Error in getCareersContent:', error);
     res.status(500).json({
       success: false,
       message: 'Server error',
+      data: {},
       error: error.message
     });
   }

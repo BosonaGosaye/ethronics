@@ -1,7 +1,7 @@
 const HomeContent = require('../models/HomeContent');
 const { validateLanguage, validateSection, validateContent } = require('../utils/validators');
 const { logActivity } = require('../middleware/activityLogger');
-const { getContentWithImageFallback } = require('../utils/imageFallback');
+const { getContentWithImageFallback, getSectionWithImageFallback } = require('../utils/imageFallback');
 
 // @desc    Get all published content for a language
 // @route   GET /api/home/:language
@@ -55,25 +55,21 @@ exports.getSection = async (req, res, next) => {
       });
     }
 
-    const content = await HomeContent.findOne({
-      language,
-      section,
-      isPublished: true
-    }).select('-__v -updatedBy');
-
-    if (!content) {
-      return res.status(404).json({
-        success: false,
-        message: 'Content not found'
-      });
-    }
+    const result = await getSectionWithImageFallback(HomeContent, language, section);
 
     res.json({
       success: true,
-      data: content.content
+      data: result.data,
+      ...(result.fallback && { fallback: true, message: 'Using English content as fallback' })
     });
   } catch (error) {
-    next(error);
+    console.error('Error in getSection:', error);
+    // Return empty object on error to prevent API crash
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching content',
+      data: {}
+    });
   }
 };
 

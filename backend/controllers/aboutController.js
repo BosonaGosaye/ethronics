@@ -1,4 +1,5 @@
 const AboutContent = require('../models/AboutContent');
+const { getContentWithImageFallback, getSectionWithImageFallback } = require('../utils/imageFallback');
 
 // @desc    Get all published sections for a language
 // @route   GET /api/about/:language
@@ -14,16 +15,7 @@ exports.getPublishedContent = async (req, res, next) => {
       });
     }
 
-    const content = await AboutContent.find({
-      language,
-      isPublished: true
-    }).select('-__v -updatedBy');
-
-    // Transform array to object with sections as keys
-    const contentObj = {};
-    content.forEach(item => {
-      contentObj[item.section] = item.content;
-    });
+    const contentObj = await getContentWithImageFallback(AboutContent, language);
 
     res.json({
       success: true,
@@ -42,25 +34,27 @@ exports.getSection = async (req, res, next) => {
   try {
     const { language, section } = req.params;
 
-    const content = await AboutContent.findOne({
-      language,
-      section,
-      isPublished: true
-    }).select('-__v -updatedBy');
-
-    if (!content) {
-      return res.status(404).json({
+    if (!['en', 'am', 'om'].includes(language)) {
+      return res.status(400).json({
         success: false,
-        message: 'Content not found'
+        message: 'Invalid language. Must be en, am, or om'
       });
     }
 
+    const result = await getSectionWithImageFallback(AboutContent, language, section);
+
     res.json({
       success: true,
-      data: content.content
+      data: result.data,
+      ...(result.fallback && { fallback: true, message: 'Using English content as fallback' })
     });
   } catch (error) {
-    next(error);
+    console.error('Error in getSection:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching content',
+      data: {}
+    });
   }
 };
 

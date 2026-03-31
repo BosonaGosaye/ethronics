@@ -1,31 +1,24 @@
 const FAQContent = require('../models/FAQContent');
+const { getSectionWithImageFallback } = require('../utils/imageFallback');
 
 // Get FAQ content by language and section (public)
 exports.getFAQContent = async (req, res) => {
   try {
     const { language, section } = req.params;
     
-    const content = await FAQContent.findOne({ 
-      language, 
-      section,
-      isPublished: true 
-    });
-    
-    if (!content) {
-      return res.status(404).json({
-        success: false,
-        message: 'Content not found'
-      });
-    }
+    const result = await getSectionWithImageFallback(FAQContent, language, section);
     
     res.json({
       success: true,
-      data: content.content
+      data: result.data,
+      ...(result.fallback && { fallback: true, message: 'Using English content as fallback' })
     });
   } catch (error) {
+    console.error('Error in getFAQContent:', error);
     res.status(500).json({
       success: false,
       message: 'Server error',
+      data: {},
       error: error.message
     });
   }

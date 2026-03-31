@@ -1,31 +1,24 @@
 const ResearchContent = require('../models/ResearchContent');
+const { getSectionWithImageFallback } = require('../utils/imageFallback');
 
 // Get published content by language and section (Public)
 exports.getPublicContent = async (req, res) => {
   try {
     const { language, section } = req.params;
     
-    const content = await ResearchContent.findOne({
-      language,
-      section,
-      isPublished: true
-    });
-    
-    if (!content) {
-      return res.status(404).json({
-        success: false,
-        message: 'Content not found'
-      });
-    }
+    const result = await getSectionWithImageFallback(ResearchContent, language, section);
     
     res.json({
       success: true,
-      data: content.content
+      data: result.data,
+      ...(result.fallback && { fallback: true, message: 'Using English content as fallback' })
     });
   } catch (error) {
+    console.error('Error in getPublicContent:', error);
     res.status(500).json({
       success: false,
       message: 'Server error',
+      data: {},
       error: error.message
     });
   }
