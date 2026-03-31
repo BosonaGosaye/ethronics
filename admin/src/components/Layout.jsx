@@ -1,6 +1,6 @@
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Home, GraduationCap, LogOut, User, Menu, X, BarChart3, Info, BookOpen, Briefcase, Users, Mail, HelpCircle, Library, Factory, Newspaper, UserPlus, Microscope } from 'lucide-react';
+import { Home, GraduationCap, LogOut, User, Menu, X, BarChart3, Info, BookOpen, Briefcase, Users, Mail, HelpCircle, Library, Factory, Newspaper, UserPlus, Microscope, Settings } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Layout() {
@@ -30,6 +30,7 @@ export default function Layout() {
     { name: 'Register Page', href: '/register-dashboard', icon: UserPlus },
     { name: 'Research Page', href: '/research-dashboard', icon: Microscope },
     { name: 'User Management', href: '/users', icon: User },
+    { name: 'Site Settings', href: '/settings', icon: Settings },
   ];
 
   const isActive = (path) => {
