@@ -9,32 +9,52 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-app.use(helmet());
+// Configure helmet with relaxed settings for CORS
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  crossOriginEmbedderPolicy: false,
+  contentSecurityPolicy: false
+}));
 
-// CORS configuration
+// CORS configuration - Allow all origins for public API
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
+    // Allow requests with no origin (like mobile apps, curl, or same-origin)
     if (!origin) return callback(null, true);
     
     const allowedOrigins = [
       process.env.CLIENT_URL,
       process.env.ADMIN_URL,
+      'https://ethronics.vercel.app',
+      'https://ethronics-admin.vercel.app',
       'http://localhost:3000',
       'http://localhost:5173',
       'http://localhost:5174'
     ];
     
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    // Allow all Vercel preview deployments
+    if (origin.includes('vercel.app')) {
+      return callback(null, true);
+    }
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      // For development, allow all origins
+      callback(null, true);
     }
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  exposedHeaders: ['Content-Range', 'X-Content-Range'],
+  maxAge: 86400 // 24 hours
 };
 
 app.use(cors(corsOptions));
+
+// Handle preflight requests
+app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
