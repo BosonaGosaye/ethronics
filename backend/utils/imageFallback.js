@@ -9,72 +9,83 @@ function mergeImages(targetContent, sourceContent) {
   try {
     const merged = JSON.parse(JSON.stringify(targetContent)); // Deep clone
     
-    // Merge hero slides images
-    if (merged.slides && Array.isArray(merged.slides) && sourceContent.slides && Array.isArray(sourceContent.slides)) {
-      merged.slides = merged.slides.map((slide, index) => ({
-        ...slide,
-        image: slide.image || (sourceContent.slides[index] && sourceContent.slides[index].image) || ''
-      }));
-    }
-    
-    // Merge single image fields
-    const imageFields = [
-      'image', 
-      'featuredImage', 
-      'worldClassImage', 
-      'researchImage',
-      'logo',
-      'icon',
-      'thumbnail',
-      'banner',
-      'cover'
-    ];
-    
-    imageFields.forEach(field => {
-      if (!merged[field] && sourceContent[field]) {
-        merged[field] = sourceContent[field];
-      }
-    });
-    
-    // Merge array of objects with images
-    const arrayFields = [
-      'features', 
-      'solutions', 
-      'capabilities', 
-      'facultyMembers', 
-      'projects', 
-      'products',
-      'services',
-      'team',
-      'gallery',
-      'partners',
-      'testimonials'
-    ];
-    
-    arrayFields.forEach(field => {
-      if (merged[field] && Array.isArray(merged[field]) && sourceContent[field] && Array.isArray(sourceContent[field])) {
-        merged[field] = merged[field].map((item, index) => {
-          if (typeof item === 'object' && item !== null) {
-            return {
-              ...item,
-              image: item.image || (sourceContent[field][index] && sourceContent[field][index].image) || '',
-              logo: item.logo || (sourceContent[field][index] && sourceContent[field][index].logo) || '',
-              icon: item.icon || (sourceContent[field][index] && sourceContent[field][index].icon) || ''
-            };
+    // Recursively merge images from source to target
+    function recursiveMerge(target, source) {
+      if (!target || !source) return target;
+      
+      // Handle arrays
+      if (Array.isArray(target) && Array.isArray(source)) {
+        return target.map((item, index) => {
+          if (typeof item === 'object' && item !== null && source[index]) {
+            return recursiveMerge(item, source[index]);
           }
           return item;
         });
       }
-    });
-    
-    // Merge images array (simple string array)
-    if (merged.images && Array.isArray(merged.images) && sourceContent.images && Array.isArray(sourceContent.images)) {
-      merged.images = merged.images.map((img, index) => 
-        img || sourceContent.images[index] || ''
-      );
+      
+      // Handle objects
+      if (typeof target === 'object' && target !== null && typeof source === 'object' && source !== null) {
+        const result = { ...target };
+        
+        // List of image-related field names
+        const imageFields = [
+          'image', 
+          'images',
+          'featuredImage', 
+          'worldClassImage', 
+          'researchImage',
+          'logo',
+          'logos',
+          'icon',
+          'icons',
+          'thumbnail',
+          'banner',
+          'cover',
+          'photo',
+          'picture',
+          'avatar',
+          'backgroundImage',
+          'heroImage'
+        ];
+        
+        // Merge image fields
+        imageFields.forEach(field => {
+          if (field in source) {
+            // If target doesn't have the field or it's empty, use source
+            if (!result[field] || result[field] === '' || 
+                (Array.isArray(result[field]) && result[field].length === 0)) {
+              result[field] = source[field];
+            }
+            // If both are arrays, merge them
+            else if (Array.isArray(result[field]) && Array.isArray(source[field])) {
+              result[field] = result[field].map((img, idx) => 
+                img || source[field][idx] || ''
+              );
+            }
+          }
+        });
+        
+        // Recursively merge nested objects and arrays
+        Object.keys(source).forEach(key => {
+          if (!imageFields.includes(key)) {
+            if (typeof source[key] === 'object' && source[key] !== null) {
+              if (result[key]) {
+                result[key] = recursiveMerge(result[key], source[key]);
+              } else {
+                // If target doesn't have this key, copy from source
+                result[key] = JSON.parse(JSON.stringify(source[key]));
+              }
+            }
+          }
+        });
+        
+        return result;
+      }
+      
+      return target;
     }
     
-    return merged;
+    return recursiveMerge(merged, sourceContent);
   } catch (error) {
     console.error('Error merging images:', error);
     return targetContent; // Return original on error
