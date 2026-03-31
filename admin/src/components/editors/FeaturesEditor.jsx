@@ -135,6 +135,20 @@ export default function FeaturesEditor({ contentByLanguage, currentLanguage, onC
                   <h4 className="text-sm font-semibold text-gray-700 mb-3">Detail Page Content</h4>
                   
                   <div className="space-y-3">
+                    {currentLanguage === 'en' && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Feature Image URL (Shared)</label>
+                        <input
+                          type="text"
+                          value={item.image || ''}
+                          onChange={(e) => updateItem(index, 'image', e.target.value)}
+                          placeholder="https://cloudinary.com/..."
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Upload image to media library and paste URL here</p>
+                      </div>
+                    )}
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Detailed Description</label>
                       <textarea

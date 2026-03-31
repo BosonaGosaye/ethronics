@@ -93,6 +93,20 @@ const FeatureDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Main Content Column */}
           <div className="lg:col-span-2 space-y-8">
+            {/* Feature Image */}
+            {feature.image && (
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                <img
+                  src={feature.image}
+                  alt={feature.title}
+                  className="w-full h-96 object-cover"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
+            )}
+
             {/* Overview */}
             {feature.detailedDescription && (
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
