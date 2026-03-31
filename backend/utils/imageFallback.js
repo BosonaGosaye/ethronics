@@ -91,12 +91,14 @@ async function getContentWithImageFallback(Model, language, query = {}) {
     ...query
   }).select('-__v -updatedBy');
 
-  // If language is English, no fallback needed
-  if (language === 'en') {
-    const contentObj = {};
-    content.forEach(item => {
-      contentObj[item.section] = item.content;
-    });
+  // Transform to object
+  const contentObj = {};
+  content.forEach(item => {
+    contentObj[item.section] = item.content;
+  });
+
+  // If language is English or no content found, return as is
+  if (language === 'en' || content.length === 0) {
     return contentObj;
   }
 
@@ -107,14 +109,13 @@ async function getContentWithImageFallback(Model, language, query = {}) {
     ...query
   }).select('-__v -updatedBy');
 
-  // Transform to objects
-  const contentObj = {};
+  // If no English content, return target language content as is
+  if (englishContent.length === 0) {
+    return contentObj;
+  }
+
+  // Transform English content to object
   const englishContentObj = {};
-  
-  content.forEach(item => {
-    contentObj[item.section] = item.content;
-  });
-  
   englishContent.forEach(item => {
     englishContentObj[item.section] = item.content;
   });
@@ -123,6 +124,13 @@ async function getContentWithImageFallback(Model, language, query = {}) {
   Object.keys(contentObj).forEach(section => {
     if (englishContentObj[section]) {
       contentObj[section] = mergeImages(contentObj[section], englishContentObj[section]);
+    }
+  });
+
+  // If target language is missing sections that exist in English, add them with English images
+  Object.keys(englishContentObj).forEach(section => {
+    if (!contentObj[section]) {
+      contentObj[section] = englishContentObj[section];
     }
   });
 
