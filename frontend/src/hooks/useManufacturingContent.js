@@ -32,7 +32,8 @@ export const useManufacturingContent = () => {
         // Build content object
         const contentObj = {};
         sections.forEach((section, index) => {
-          contentObj[section] = results[index].data.content;
+          // After the fix, API returns data directly (not data.content)
+          contentObj[section] = results[index].data || {};
         });
 
         // Add products list to the products section
@@ -100,7 +101,8 @@ export const useSectionContent = (sectionName) => {
         }
 
         const data = await response.json();
-        setContent(data.data.content);
+        // After the fix, API returns data directly (not data.content)
+        setContent(data.data || {});
         setError(null);
       } catch (err) {
         console.error(`Error fetching ${sectionName} content:`, err);
