@@ -48,11 +48,11 @@ export const AuthProvider = ({ children }) => {
       if (response.data.success) {
         const { token, user } = response.data;
         
-        // Store token only in memory (state), not in localStorage
+        // Store token in state
         setToken(token);
         setUser(user);
         
-        // Set token in axios instance headers for this session
+        // Set token in both axios defaults and instance headers
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         
         return { success: true };

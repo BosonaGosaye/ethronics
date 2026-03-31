@@ -3,7 +3,7 @@ import { X, Upload, FileText, Loader, User, GraduationCap, Briefcase, Award } fr
 import { useLanguage } from '../contexts/LanguageContext';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5001/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
 const EDUCATION_LEVELS = [
   { value: 'high-school', label: 'High School' },

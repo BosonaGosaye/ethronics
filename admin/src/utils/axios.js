@@ -7,11 +7,14 @@ const axiosInstance = axios.create({
   baseURL: API_URL
 });
 
-// Add request interceptor to include auth token from axios defaults
-// Token will be set by AuthContext after login
+// Add request interceptor to include auth token
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Token is set in axios.defaults.headers.common by AuthContext
+    // Get token from axios defaults (set by AuthContext)
+    const token = axios.defaults.headers.common['Authorization'];
+    if (token) {
+      config.headers.Authorization = token;
+    }
     return config;
   },
   (error) => {
