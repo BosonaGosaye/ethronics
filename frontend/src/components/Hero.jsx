@@ -193,7 +193,9 @@ const HeroCarousel = ({ slides, buttons = [], badge, className = "" }) => {
               <img
                 key={index}
                 src={slide.image}
-                alt=""
+                alt={slide.title || "Hero slide"}
+                loading={index === 0 ? "eager" : "lazy"}
+                decoding="async"
                 className={`absolute w-full h-full object-contain transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) ${
                   index === currentSlide
                     ? 'opacity-100 translate-y-0 scale-100 rotate-0 blur-0'
