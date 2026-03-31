@@ -45,23 +45,19 @@ decoding="async"
 - Other images load as needed
 - Saves bandwidth on slow connections
 
-### 4. Minification & Compression
+### 5. Minification & Compression
 **File**: `frontend/vite.config.js`
 
-Enabled Terser minification with console removal:
+Enabled esbuild minification (faster than terser):
 ```javascript
-minify: 'terser',
-terserOptions: {
-  compress: {
-    drop_console: true,
-    drop_debugger: true
-  }
-}
+minify: 'esbuild',
+target: 'es2015'
 ```
 
 **Impact**: 
 - Smaller JavaScript bundles
 - Faster download times
+- Faster build times (esbuild is 10-100x faster than terser)
 - Reduced parse time
 
 ### 5. HTTP Caching Headers
