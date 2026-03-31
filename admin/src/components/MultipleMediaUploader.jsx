@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Upload, X, Image as ImageIcon, Loader } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function MultipleMediaUploader({ 
   onUploadComplete,
@@ -8,6 +9,7 @@ export default function MultipleMediaUploader({
   maxFiles = 10,
   label = 'Upload Media Files'
 }) {
+  const { token } = useAuth();
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [mediaUrls, setMediaUrls] = useState(currentUrls);
@@ -35,7 +37,6 @@ export default function MultipleMediaUploader({
         formData.append('image', file);
 
         const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
-        const token = localStorage.getItem('token');
         const response = await fetch(`${API_URL}/media/upload-image`, {
           method: 'POST',
           headers: {

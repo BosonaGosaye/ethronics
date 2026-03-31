@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Upload, X, Image, Video, File, Loader } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function MediaUploader({ 
   type = 'image', // 'image', 'video', 'file'
@@ -8,6 +9,7 @@ export default function MediaUploader({
   label = 'Upload Media',
   accept = null
 }) {
+  const { token } = useAuth();
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState(currentUrl);
   const [error, setError] = useState(null);
@@ -70,7 +72,6 @@ export default function MediaUploader({
       formData.append(getFieldName(), file);
 
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
-      const token = localStorage.getItem('token');
       const response = await fetch(`${API_URL.replace('/api', '')}${getEndpoint()}`, {
         method: 'POST',
         headers: {

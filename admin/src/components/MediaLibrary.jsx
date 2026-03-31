@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { X, Search, Image as ImageIcon, Loader } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function MediaLibrary({ isOpen, onClose, onSelect, type = 'image' }) {
+  const { token } = useAuth();
   const [media, setMedia] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -17,7 +19,6 @@ export default function MediaLibrary({ isOpen, onClose, onSelect, type = 'image'
     setLoading(true);
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
-      const token = localStorage.getItem('token');
       const response = await fetch(
         `${API_URL}/media/list?type=${type}`,
         {
