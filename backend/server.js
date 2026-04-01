@@ -6,6 +6,16 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
+// Validate required environment variables
+const requiredEnvVars = ['MONGODB_URI', 'JWT_SECRET'];
+const missingEnvVars = requiredEnvVars.filter(varName => !process.env[varName]);
+
+if (missingEnvVars.length > 0) {
+  console.error('❌ Missing required environment variables:', missingEnvVars.join(', '));
+  console.error('Please set these in your Render dashboard under Environment Variables');
+  process.exit(1);
+}
+
 const app = express();
 
 // Middleware
@@ -122,19 +132,37 @@ app.use((err, req, res, next) => {
 });
 
 // Database connection
+console.log('🔍 Starting server...');
+console.log('📝 Environment:', process.env.NODE_ENV);
+console.log('🔌 MongoDB URI exists:', !!process.env.MONGODB_URI);
+console.log('🔑 JWT Secret exists:', !!process.env.JWT_SECRET);
+
+if (!process.env.MONGODB_URI) {
+  console.error('❌ MONGODB_URI is not defined in environment variables');
+  process.exit(1);
+}
+
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('✅ MongoDB connected successfully');
     
     // Start server
     const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📝 Environment: ${process.env.NODE_ENV}`);
+      console.log(`🌐 Server is listening on 0.0.0.0:${PORT}`);
+    });
+
+    // Handle server errors
+    server.on('error', (error) => {
+      console.error('❌ Server error:', error);
+      process.exit(1);
     });
   })
   .catch((err) => {
-    console.error('❌ MongoDB connection error:', err);
+    console.error('❌ MongoDB connection error:', err.message);
+    console.error('Full error:', err);
     process.exit(1);
   });
 
