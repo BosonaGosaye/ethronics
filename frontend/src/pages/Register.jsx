@@ -358,7 +358,7 @@ const Register = () => {
       <div className="min-h-screen bg-gray-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-gray-800 bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center transition-colors duration-200">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading...</p>
+          <p className="text-gray-600 dark:text-gray-400">{t.loading || 'Loading...'}</p>
         </div>
       </div>
     )
@@ -368,7 +368,7 @@ const Register = () => {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-gray-800 bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center transition-colors duration-200">
         <div className="text-center">
-          <p className="text-red-600 dark:text-red-400">Error loading content: {error}</p>
+          <p className="text-red-600 dark:text-red-400">{t.errorLoading || 'Error loading content'}: {error}</p>
         </div>
       </div>
     )

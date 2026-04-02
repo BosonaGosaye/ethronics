@@ -62,6 +62,13 @@ export const registerTranslations = {
       submitting: "Submitting...",
       selectGrade: "Select Grade",
       placeholderName: "Enter student name",
+      placeholderStudentName: "Enter student name",
+      placeholderStudentEmail: "student@example.com",
+      placeholderSchool: "School name",
+      placeholderGuardianName: "Parent/Guardian name",
+      placeholderGuardianEmail: "parent@example.com",
+      placeholderEmergency: "+251912345678",
+      selectSession: "Select Session",
       errorStudentName: "Student Name is required.",
       errorStudentAge: "Student Age is required and must be between 6 and 25.",
       errorStudentGender: "Student Gender is required.",
@@ -91,7 +98,9 @@ export const registerTranslations = {
       nextSteps: "Next Steps",
       registrationSuccessful: "Registration Successful!",
       congratulations: "Congratulations",
-      registrationComplete: "Registration complete! Follow these steps to secure your spot."
+      registrationComplete: "Registration complete! Follow these steps to secure your spot.",
+      loading: "Loading...",
+      errorLoading: "Error loading content"
     },
     gallery: {
       galleryTitle: "See Our Learning in Action",
@@ -185,6 +194,13 @@ export const registerTranslations = {
       submitting: "በማስገባት ላይ...",
       selectGrade: "ክፍል ይምረጡ",
       placeholderName: "የተማሪ ስም ያስገቡ",
+      placeholderStudentName: "የተማሪ ስም ያስገቡ",
+      placeholderStudentEmail: "ተማሪ@ምሳሌ.com",
+      placeholderSchool: "የትምህርት ቤት ስም",
+      placeholderGuardianName: "የወላጅ/ተጠንቃቂ ስም",
+      placeholderGuardianEmail: "ወላጅ@ምሳሌ.com",
+      placeholderEmergency: "+251912345678",
+      selectSession: "ክፍለ ጊዜ ይምረጡ",
       errorStudentName: "የተማሪ ስም ያስፈልጋል።",
       errorStudentAge: "የተማሪ ዕድሜ ያስፈልጋል እና 6 እስከ 25 መካከል መሆን አለበት።",
       errorStudentGender: "የተማሪ ጾታ ያስፈልጋል።",
@@ -194,7 +210,7 @@ export const registerTranslations = {
       errorExperience: "የሮቦቲክስ ልምድ ያስፈልጋል።",
       errorSession: "ተመራጭ ክፍለ ጊዜ ያስፈልጋል።",
       errorGuardianName: "የወላጅ/ተጠንቃቂ ስም ያስፈልጋል።",
-      errorGuardianEmail: "የወላጅ/ተጠንቃቂ ኢሜል ያሸፈልጋል።",
+      errorGuardianEmail: "የወላጅ/ተጠንቃቂ ኢሜል ያስፈልጋል።",
       errorEmergency: "የድንገተኛ ግንኙነት ቁጥር ያስፈልጋል።",
       apiError: "ምዝገባን ለማስገባት አልተሳካም። እባክዎ እንደገና ይሞክሩ።",
       successMessage: "ለመመዝገብ እናመሰግናለን! የሙከራ ግብዣ እና ውጤቶች በኢሜል ወይም በጽሑፍ መልእክት ይላካሉ።",
@@ -214,7 +230,9 @@ export const registerTranslations = {
       nextSteps: "ቀጣይ ደረጃዎች",
       registrationSuccessful: "ምዝገባ ተሳክቷል!",
       congratulations: "እንኳን ደስ ያለዎት",
-      registrationComplete: "ምዝገባዎ ተጠናቋል! ቦታዎን ለመጠበቅ እነዚህን ደረጃዎች ይከተሉ።"
+      registrationComplete: "ምዝገባዎ ተጠናቋል! ቦታዎን ለመጠበቅ እነዚህን ደረጃዎች ይከተሉ።",
+      loading: "በመጫን ላይ...",
+      errorLoading: "ይዘት በመጫን ላይ ስህተት"
     },
     gallery: {
       galleryTitle: "ትምህርታችንን በተግባር ይመልከቱ",
@@ -308,6 +326,13 @@ export const registerTranslations = {
       submitting: "Galchuutti...",
       selectGrade: "Kutaa Filadhu",
       placeholderName: "Maqaa barataa galchi",
+      placeholderStudentName: "Maqaa barataa galchi",
+      placeholderStudentEmail: "barataa@fakkenya.com",
+      placeholderSchool: "Maqaa mana barumsaa",
+      placeholderGuardianName: "Maqaa maatii",
+      placeholderGuardianEmail: "maatii@fakkenya.com",
+      placeholderEmergency: "+251912345678",
+      selectSession: "Yeroo Filadhu",
       errorStudentName: "Maqaan Barataa barbaachisaa dha.",
       errorStudentAge: "Umuriin Barataa barbaachisaa fi 6 hanga 25 gidduutti ta'uu qaba.",
       errorStudentGender: "Koorniyaan Barataa barbaachisaa dha.",
@@ -337,7 +362,9 @@ export const registerTranslations = {
       nextSteps: "Sadarkaawwan ittaanu",
       registrationSuccessful: "Galmeen milkaa'e!",
       congratulations: "Baga gammade",
-      registrationComplete: "Galmeen xumurame! Bakka keessan eeguuf sadarkaawwanan hordofaa."
+      registrationComplete: "Galmeen xumurame! Bakka keessan eeguuf sadarkaawwanan hordofaa.",
+      loading: "Fe'aa jira...",
+      errorLoading: "Qabiyyee fe'uutti dogoggora"
     },
     gallery: {
       galleryTitle: "Barnoota Keenya Gocha Keessatti Ilaalaa",
