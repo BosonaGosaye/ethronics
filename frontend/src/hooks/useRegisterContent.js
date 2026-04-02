@@ -23,7 +23,8 @@ export const useRegisterContent = (language = 'en') => {
           axios.get(`${BASE_URL}/register/public/${language}/${section}`)
             .then(res => ({ 
               section, 
-              // After the fix, API returns data directly (not data.content)
+              // Backend returns { success: true, data: {...content...} }
+              // The data is already the content object from the database
               data: res.data.data || {} 
             }))
             .catch(err => {
