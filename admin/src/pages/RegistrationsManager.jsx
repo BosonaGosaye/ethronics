@@ -63,7 +63,6 @@ export default function RegistrationsManager() {
     
     try {
       await axios.delete(`/registrations/admin/${id}`);
-      });
       
       fetchRegistrations();
       fetchStats();

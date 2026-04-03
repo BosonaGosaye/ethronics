@@ -73,7 +73,6 @@ export default function ResearchProjectsManager() {
     
     try {
       await axios.delete(`/research-projects/admin/${id}`);
-      });
       
       fetchProjects();
       fetchStats();
