@@ -231,97 +231,138 @@ export default function Dashboard() {
         // Silently handle - may not have permission
       }
 
-      // Build recent activity from all available data
-      recentActivity = [
-        ...homeData.slice(0, 1).map(item => ({
-          type: 'home',
-          section: item.section,
-          language: item.language,
-          updatedAt: item.updatedAt,
-          status: item.isPublished ? 'published' : 'draft'
-        })),
-        ...academicData.slice(0, 1).map(item => ({
-          type: 'academic',
-          section: item.section,
-          language: item.language,
-          updatedAt: item.updatedAt,
-          status: item.isPublished ? 'published' : 'draft'
-        })),
-        ...aboutData.slice(0, 1).map(item => ({
-          type: 'about',
-          section: item.section,
-          language: item.language,
-          updatedAt: item.updatedAt,
-          status: item.isPublished ? 'published' : 'draft'
-        })),
-        ...blogData.slice(0, 1).map(item => ({
-          type: 'blog',
-          section: item.section,
-          language: item.language,
-          updatedAt: item.updatedAt,
-          status: item.isPublished ? 'published' : 'draft'
-        })),
-        ...careersData.slice(0, 1).map(item => ({
-          type: 'careers',
-          section: item.section,
-          language: item.language,
-          updatedAt: item.updatedAt,
-          status: item.isPublished ? 'published' : 'draft'
-        })),
-        ...contactData.slice(0, 1).map(item => ({
-          type: 'contact',
-          section: item.section,
-          language: item.language,
-          updatedAt: item.updatedAt,
-          status: item.isPublished ? 'published' : 'draft'
-        })),
-        ...faqData.slice(0, 1).map(item => ({
-          type: 'faq',
-          section: item.section,
-          language: item.language,
-          updatedAt: item.updatedAt,
-          status: item.isPublished ? 'published' : 'draft'
-        })),
-        ...libraryData.slice(0, 1).map(item => ({
-          type: 'library',
-          section: item.section,
-          language: item.language,
-          updatedAt: item.updatedAt,
-          status: item.isPublished ? 'published' : 'draft'
-        })),
-        ...manufacturingData.slice(0, 1).map(item => ({
-          type: 'manufacturing',
-          section: item.section,
-          language: item.language,
-          updatedAt: item.updatedAt,
-          status: item.isPublished ? 'published' : 'draft'
-        })),
-        ...newsEventsData.slice(0, 1).map(item => ({
-          type: 'newsEvents',
-          section: item.section,
-          language: item.language,
-          updatedAt: item.updatedAt,
-          status: item.isPublished ? 'published' : 'draft'
-        })),
-        ...registerData.slice(0, 1).map(item => ({
-          type: 'register',
-          section: item.section,
-          language: item.language,
-          updatedAt: item.updatedAt,
-          status: item.isPublished ? 'published' : 'draft'
-        })),
-        ...researchData.slice(0, 1).map(item => ({
-          type: 'research',
-          section: item.section,
-          language: item.language,
-          updatedAt: item.updatedAt,
-          status: item.isPublished ? 'published' : 'draft'
-        }))
-      ];
+      // Fetch recent activity logs from backend
+      try {
+        const activityResponse = await axios.get('/users/activities/all?limit=10');
+        if (activityResponse.data.success) {
+          recentActivity = activityResponse.data.data.map(activity => ({
+            type: activity.resource,
+            action: activity.action,
+            section: activity.details?.section || 'N/A',
+            language: activity.details?.language || 'en',
+            updatedAt: activity.createdAt,
+            status: activity.status === 'success' ? 'success' : 'error',
+            user: activity.user?.name || 'Unknown',
+            resourceId: activity.resourceId
+          }));
+        }
+      } catch (error) {
+        // If activity logs fail, build from content data as fallback
+        recentActivity = [
+          ...homeData.slice(0, 1).map(item => ({
+            type: 'home',
+            action: 'content_update',
+            section: item.section,
+            language: item.language,
+            updatedAt: item.updatedAt,
+            status: item.isPublished ? 'published' : 'draft',
+            user: 'System'
+          })),
+          ...academicData.slice(0, 1).map(item => ({
+            type: 'academic',
+            action: 'content_update',
+            section: item.section,
+            language: item.language,
+            updatedAt: item.updatedAt,
+            status: item.isPublished ? 'published' : 'draft',
+            user: 'System'
+          })),
+          ...aboutData.slice(0, 1).map(item => ({
+            type: 'about',
+            action: 'content_update',
+            section: item.section,
+            language: item.language,
+            updatedAt: item.updatedAt,
+            status: item.isPublished ? 'published' : 'draft',
+            user: 'System'
+          })),
+          ...blogData.slice(0, 1).map(item => ({
+            type: 'blog',
+            action: 'content_update',
+            section: item.section,
+            language: item.language,
+            updatedAt: item.updatedAt,
+            status: item.isPublished ? 'published' : 'draft',
+            user: 'System'
+          })),
+          ...careersData.slice(0, 1).map(item => ({
+            type: 'careers',
+            action: 'content_update',
+            section: item.section,
+            language: item.language,
+            updatedAt: item.updatedAt,
+            status: item.isPublished ? 'published' : 'draft',
+            user: 'System'
+          })),
+          ...contactData.slice(0, 1).map(item => ({
+            type: 'contact',
+            action: 'content_update',
+            section: item.section,
+            language: item.language,
+            updatedAt: item.updatedAt,
+            status: item.isPublished ? 'published' : 'draft',
+            user: 'System'
+          })),
+          ...faqData.slice(0, 1).map(item => ({
+            type: 'faq',
+            action: 'content_update',
+            section: item.section,
+            language: item.language,
+            updatedAt: item.updatedAt,
+            status: item.isPublished ? 'published' : 'draft',
+            user: 'System'
+          })),
+          ...libraryData.slice(0, 1).map(item => ({
+            type: 'library',
+            action: 'content_update',
+            section: item.section,
+            language: item.language,
+            updatedAt: item.updatedAt,
+            status: item.isPublished ? 'published' : 'draft',
+            user: 'System'
+          })),
+          ...manufacturingData.slice(0, 1).map(item => ({
+            type: 'manufacturing',
+            action: 'content_update',
+            section: item.section,
+            language: item.language,
+            updatedAt: item.updatedAt,
+            status: item.isPublished ? 'published' : 'draft',
+            user: 'System'
+          })),
+          ...newsEventsData.slice(0, 1).map(item => ({
+            type: 'newsEvents',
+            action: 'content_update',
+            section: item.section,
+            language: item.language,
+            updatedAt: item.updatedAt,
+            status: item.isPublished ? 'published' : 'draft',
+            user: 'System'
+          })),
+          ...registerData.slice(0, 1).map(item => ({
+            type: 'register',
+            action: 'content_update',
+            section: item.section,
+            language: item.language,
+            updatedAt: item.updatedAt,
+            status: item.isPublished ? 'published' : 'draft',
+            user: 'System'
+          })),
+          ...researchData.slice(0, 1).map(item => ({
+            type: 'research',
+            action: 'content_update',
+            section: item.section,
+            language: item.language,
+            updatedAt: item.updatedAt,
+            status: item.isPublished ? 'published' : 'draft',
+            user: 'System'
+          }))
+        ];
 
-      // Sort by most recent
-      recentActivity.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-      recentActivity = recentActivity.slice(0, 10); // Show only 10 most recent
+        // Sort by most recent
+        recentActivity.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+        recentActivity = recentActivity.slice(0, 10); // Show only 10 most recent
+      }
 
       // Set all stats at once
       setStats({
@@ -621,7 +662,14 @@ export default function Dashboard() {
                       </div>
                       <div>
                         <p className="font-medium text-gray-900">
-                          {activity.section.charAt(0).toUpperCase() + activity.section.slice(1)} Section
+                          {activity.action === 'content_create' ? 'Created' :
+                           activity.action === 'content_update' ? 'Updated' :
+                           activity.action === 'content_delete' ? 'Deleted' :
+                           activity.action === 'content_publish' ? 'Published' :
+                           activity.action === 'content_unpublish' ? 'Unpublished' :
+                           activity.action === 'login' ? 'Logged in' :
+                           activity.action === 'logout' ? 'Logged out' :
+                           activity.action} {activity.section !== 'N/A' ? `- ${activity.section.charAt(0).toUpperCase() + activity.section.slice(1)}` : ''}
                         </p>
                         <p className="text-sm text-gray-500">
                           {activity.type === 'home' ? 'Home Page' : 
@@ -636,17 +684,23 @@ export default function Dashboard() {
                            activity.type === 'newsEvents' ? 'News & Events' :
                            activity.type === 'register' ? 'Register Page' :
                            activity.type === 'research' ? 'Research Page' :
-                           'Page'} • {activity.language.toUpperCase()}
+                           activity.type.charAt(0).toUpperCase() + activity.type.slice(1)} • {activity.language.toUpperCase()} • by {activity.user}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-4">
                       <span className={`px-3 py-1 text-xs font-medium rounded-full ${
-                        activity.status === 'published'
+                        activity.status === 'published' || activity.status === 'success'
                           ? 'bg-green-100 text-green-800'
-                          : 'bg-yellow-100 text-yellow-800'
+                          : activity.status === 'draft'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : activity.status === 'error'
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-gray-100 text-gray-800'
                       }`}>
-                        {activity.status}
+                        {activity.status === 'success' ? 'Success' : 
+                         activity.status === 'error' ? 'Error' :
+                         activity.status}
                       </span>
                       <div className="flex items-center space-x-2 text-sm text-gray-500">
                         <Clock className="w-4 h-4" />
