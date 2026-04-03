@@ -65,7 +65,6 @@ export default function NewsEventItemsManager() {
     
     try {
       await axios.delete(`/newsEventItems/admin/${id}`);
-      });
       
       fetchItems();
       fetchStats();
