@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../utils/axios';
 import { 
-  Home, GraduationCap, FileText, TrendingUp, Users, 
-  Globe, Clock, CheckCircle, AlertCircle, ArrowRight, Info, BookOpen, Briefcase, Mail, HelpCircle, Library, Factory 
+  Home, GraduationCap, FileText, TrendingUp, 
+  Globe, Clock, CheckCircle, AlertCircle, ArrowRight, Info, BookOpen, Briefcase, Mail, HelpCircle, Library, Factory, Newspaper, UserPlus, Microscope, UserCog
 } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
@@ -18,6 +18,11 @@ export default function Dashboard() {
     contactContent: { total: 0, published: 0, draft: 0 },
     faqContent: { total: 0, published: 0, draft: 0 },
     libraryContent: { total: 0, published: 0, draft: 0 },
+    manufacturingContent: { total: 0, published: 0, draft: 0 },
+    newsEventsContent: { total: 0, published: 0, draft: 0 },
+    registerContent: { total: 0, published: 0, draft: 0 },
+    researchContent: { total: 0, published: 0, draft: 0 },
+    usersCount: { total: 0, active: 0 },
     recentActivity: []
   });
   const [loading, setLoading] = useState(true);
@@ -153,6 +158,79 @@ export default function Dashboard() {
         // Silently handle - content may not exist yet
       }
 
+      // Fetch manufacturing content stats
+      let manufacturingStats = { ...defaultStats };
+      let manufacturingData = [];
+      try {
+        const manufacturingResponse = await axios.get('/manufacturing/admin/en');
+        manufacturingData = manufacturingResponse.data.data || [];
+        manufacturingStats = {
+          total: manufacturingData.length,
+          published: manufacturingData.filter(item => item.isPublished).length,
+          draft: manufacturingData.filter(item => !item.isPublished).length
+        };
+      } catch (error) {
+        // Silently handle - content may not exist yet
+      }
+
+      // Fetch news & events content stats
+      let newsEventsStats = { ...defaultStats };
+      let newsEventsData = [];
+      try {
+        const newsEventsResponse = await axios.get('/newsEvents/admin/en');
+        newsEventsData = newsEventsResponse.data.data || [];
+        newsEventsStats = {
+          total: newsEventsData.length,
+          published: newsEventsData.filter(item => item.isPublished).length,
+          draft: newsEventsData.filter(item => !item.isPublished).length
+        };
+      } catch (error) {
+        // Silently handle - content may not exist yet
+      }
+
+      // Fetch register content stats
+      let registerStats = { ...defaultStats };
+      let registerData = [];
+      try {
+        const registerResponse = await axios.get('/register/admin/en');
+        registerData = registerResponse.data.data || [];
+        registerStats = {
+          total: registerData.length,
+          published: registerData.filter(item => item.isPublished).length,
+          draft: registerData.filter(item => !item.isPublished).length
+        };
+      } catch (error) {
+        // Silently handle - content may not exist yet
+      }
+
+      // Fetch research content stats
+      let researchStats = { ...defaultStats };
+      let researchData = [];
+      try {
+        const researchResponse = await axios.get('/research/admin/en');
+        researchData = researchResponse.data.data || [];
+        researchStats = {
+          total: researchData.length,
+          published: researchData.filter(item => item.isPublished).length,
+          draft: researchData.filter(item => !item.isPublished).length
+        };
+      } catch (error) {
+        // Silently handle - content may not exist yet
+      }
+
+      // Fetch users count
+      let usersCount = { total: 0, active: 0 };
+      try {
+        const usersResponse = await axios.get('/users/admin/all');
+        const usersData = usersResponse.data.data || [];
+        usersCount = {
+          total: usersData.length,
+          active: usersData.filter(user => user.isActive).length
+        };
+      } catch (error) {
+        // Silently handle - may not have permission
+      }
+
       // Build recent activity from all available data
       recentActivity = [
         ...homeData.slice(0, 1).map(item => ({
@@ -210,8 +288,40 @@ export default function Dashboard() {
           language: item.language,
           updatedAt: item.updatedAt,
           status: item.isPublished ? 'published' : 'draft'
+        })),
+        ...manufacturingData.slice(0, 1).map(item => ({
+          type: 'manufacturing',
+          section: item.section,
+          language: item.language,
+          updatedAt: item.updatedAt,
+          status: item.isPublished ? 'published' : 'draft'
+        })),
+        ...newsEventsData.slice(0, 1).map(item => ({
+          type: 'newsEvents',
+          section: item.section,
+          language: item.language,
+          updatedAt: item.updatedAt,
+          status: item.isPublished ? 'published' : 'draft'
+        })),
+        ...registerData.slice(0, 1).map(item => ({
+          type: 'register',
+          section: item.section,
+          language: item.language,
+          updatedAt: item.updatedAt,
+          status: item.isPublished ? 'published' : 'draft'
+        })),
+        ...researchData.slice(0, 1).map(item => ({
+          type: 'research',
+          section: item.section,
+          language: item.language,
+          updatedAt: item.updatedAt,
+          status: item.isPublished ? 'published' : 'draft'
         }))
       ];
+
+      // Sort by most recent
+      recentActivity.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+      recentActivity = recentActivity.slice(0, 10); // Show only 10 most recent
 
       // Set all stats at once
       setStats({
@@ -223,6 +333,11 @@ export default function Dashboard() {
         contactContent: contactStats,
         faqContent: faqStats,
         libraryContent: libraryStats,
+        manufacturingContent: manufacturingStats,
+        newsEventsContent: newsEventsStats,
+        registerContent: registerStats,
+        researchContent: researchStats,
+        usersCount: usersCount,
         recentActivity
       });
     } catch (error) {
@@ -237,6 +352,11 @@ export default function Dashboard() {
         contactContent: { total: 0, published: 0, draft: 0 },
         faqContent: { total: 0, published: 0, draft: 0 },
         libraryContent: { total: 0, published: 0, draft: 0 },
+        manufacturingContent: { total: 0, published: 0, draft: 0 },
+        newsEventsContent: { total: 0, published: 0, draft: 0 },
+        registerContent: { total: 0, published: 0, draft: 0 },
+        researchContent: { total: 0, published: 0, draft: 0 },
+        usersCount: { total: 0, active: 0 },
         recentActivity: []
       });
     } finally {
@@ -308,6 +428,46 @@ export default function Dashboard() {
       href: '/library-dashboard',
       color: 'from-indigo-500 to-blue-500',
       stats: stats.libraryContent
+    },
+    {
+      title: 'Manufacturing',
+      description: 'Manage manufacturing content and products',
+      icon: Factory,
+      href: '/manufacturing-dashboard',
+      color: 'from-gray-600 to-gray-800',
+      stats: stats.manufacturingContent
+    },
+    {
+      title: 'News & Events',
+      description: 'Manage news articles and events',
+      icon: Newspaper,
+      href: '/news-events-dashboard',
+      color: 'from-blue-600 to-indigo-600',
+      stats: stats.newsEventsContent
+    },
+    {
+      title: 'Register Page',
+      description: 'Manage registration content and submissions',
+      icon: UserPlus,
+      href: '/register-dashboard',
+      color: 'from-green-500 to-emerald-600',
+      stats: stats.registerContent
+    },
+    {
+      title: 'Research Page',
+      description: 'Manage research projects and content',
+      icon: Microscope,
+      href: '/research-dashboard',
+      color: 'from-purple-600 to-indigo-600',
+      stats: stats.researchContent
+    },
+    {
+      title: 'User Management',
+      description: 'Manage admin users and permissions',
+      icon: UserCog,
+      href: '/users',
+      color: 'from-red-500 to-pink-600',
+      stats: { total: stats.usersCount.total, published: stats.usersCount.active }
     }
   ];
 
@@ -443,8 +603,20 @@ export default function Dashboard() {
                           <Briefcase className="w-5 h-5 text-teal-600" />
                         ) : activity.type === 'contact' ? (
                           <Mail className="w-5 h-5 text-orange-600" />
-                        ) : (
+                        ) : activity.type === 'faq' ? (
                           <HelpCircle className="w-5 h-5 text-blue-600" />
+                        ) : activity.type === 'library' ? (
+                          <Library className="w-5 h-5 text-indigo-600" />
+                        ) : activity.type === 'manufacturing' ? (
+                          <Factory className="w-5 h-5 text-gray-600" />
+                        ) : activity.type === 'newsEvents' ? (
+                          <Newspaper className="w-5 h-5 text-blue-600" />
+                        ) : activity.type === 'register' ? (
+                          <UserPlus className="w-5 h-5 text-green-600" />
+                        ) : activity.type === 'research' ? (
+                          <Microscope className="w-5 h-5 text-purple-600" />
+                        ) : (
+                          <FileText className="w-5 h-5 text-gray-600" />
                         )}
                       </div>
                       <div>
@@ -458,7 +630,13 @@ export default function Dashboard() {
                            activity.type === 'blog' ? 'Blog Page' :
                            activity.type === 'careers' ? 'Careers Page' :
                            activity.type === 'contact' ? 'Contact Page' :
-                           'FAQ Page'} • {activity.language.toUpperCase()}
+                           activity.type === 'faq' ? 'FAQ Page' :
+                           activity.type === 'library' ? 'Library Page' :
+                           activity.type === 'manufacturing' ? 'Manufacturing' :
+                           activity.type === 'newsEvents' ? 'News & Events' :
+                           activity.type === 'register' ? 'Register Page' :
+                           activity.type === 'research' ? 'Research Page' :
+                           'Page'} • {activity.language.toUpperCase()}
                         </p>
                       </div>
                     </div>
@@ -488,28 +666,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Help Section */}
-      <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-8 border border-gray-200">
-        <div className="flex items-start space-x-4">
-          <div className="p-3 bg-white rounded-lg shadow-sm">
-            <Users className="w-6 h-6 text-gray-600" />
-          </div>
-          <div className="flex-1">
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Need Help?</h3>
-            <p className="text-gray-600 mb-4">
-              Check out our documentation or contact support for assistance with the CMS.
-            </p>
-            <div className="flex space-x-3">
-              <button className="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium shadow-sm">
-                View Docs
-              </button>
-              <button className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium">
-                Contact Support
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

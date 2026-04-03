@@ -20,7 +20,7 @@ const SECTIONS = [
 
 const SECTION_STATS = {
   total: 6,
-  published: 0,
+  published: 6,
   draft: 0
 };
 
