@@ -45,7 +45,7 @@ export default function NewsEventsContentEditor() {
 
       for (const lang of LANGUAGES) {
         try {
-          const response = await axios.get(`/newsEvents/${lang.code}/${urlSection}`);
+          const response = await axios.get(`/newsEvents/admin/${lang.code}/${urlSection}`);
           contentMap[lang.code] = response.data.data;
           statusMap[lang.code] = {
             isPublished: response.data.data.isPublished,
@@ -80,7 +80,7 @@ export default function NewsEventsContentEditor() {
       for (const lang of LANGUAGES) {
         const content = contentByLanguage[lang.code];
         if (content && Object.keys(content).length > 0) {
-          await axios.post('/newsEvents', {
+          await axios.post('/newsEvents/admin', {
             language: lang.code,
             section: urlSection,
             content
@@ -113,7 +113,7 @@ export default function NewsEventsContentEditor() {
     }
 
     try {
-      await axios.patch(`/newsEvents/${language}/${urlSection}/publish`);
+      await axios.patch(`/newsEvents/admin/${language}/${urlSection}/publish`);
       
       setPublishStatus(prev => ({
         ...prev,

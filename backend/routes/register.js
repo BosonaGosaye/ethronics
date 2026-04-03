@@ -9,7 +9,7 @@ router.get('/public/:language/:section', registerController.getPublicContent);
 // Admin routes
 router.get('/admin', protect, authorize('admin'), registerController.getAllContent);
 router.get('/admin/:language', protect, authorize('admin'), registerController.getAllSectionsByLanguage);
-router.get('/:language/:section', registerController.getAdminContent);
+router.get('/:language/:section', protect, authorize('admin'), registerController.getAdminContent);
 router.post('/', protect, authorize('admin'), registerController.upsertContent);
 router.patch('/:language/:section/publish', protect, authorize('admin'), registerController.togglePublish);
 router.get('/admin/stats/all', protect, authorize('admin'), registerController.getStatistics);
