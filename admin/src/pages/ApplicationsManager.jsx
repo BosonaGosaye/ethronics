@@ -68,12 +68,13 @@ export default function ApplicationsManager() {
       if (dateRange.end) params.append('endDate', dateRange.end);
       params.append('format', exportFormat);
       
-      const token = localStorage.getItem('token');
+      // Get token from axios defaults (where it's stored after login)
+      const token = axios.defaults.headers.common['Authorization'];
       const response = await fetch(
         `${import.meta.env.VITE_API_URL || 'http://localhost:5001/api'}/applications/admin/export?${params}`,
         {
           headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': token || ''
           }
         }
       );

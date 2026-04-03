@@ -24,7 +24,6 @@ const BlogCommentsManager = () => {
   const fetchComments = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
       
       let url = `${API_URL}/blog-comments/admin/all`;
       const params = new URLSearchParams();
@@ -43,9 +42,7 @@ const BlogCommentsManager = () => {
         url += `?${params.toString()}`;
       }
       
-      const response = await axios.get(url, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.get(url);
       
       setComments(response.data.data);
     } catch (error) {
@@ -58,10 +55,7 @@ const BlogCommentsManager = () => {
 
   const fetchStats = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/blog-comments/admin/stats`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.get(`${API_URL}/blog-comments/admin/stats`);
       setStats(response.data.data);
     } catch (error) {
       console.error('Error fetching stats:', error);
@@ -70,11 +64,9 @@ const BlogCommentsManager = () => {
 
   const handleToggleApproval = async (commentId) => {
     try {
-      const token = localStorage.getItem('token');
       await axios.patch(
         `${API_URL}/blog-comments/${commentId}/approve`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
+        {}
       );
       
       fetchComments();
@@ -89,10 +81,7 @@ const BlogCommentsManager = () => {
     if (!confirm('Are you sure you want to delete this comment?')) return;
     
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`${API_URL}/blog-comments/${commentId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await axios.delete(`${API_URL}/blog-comments/${commentId}`);
       
       fetchComments();
       fetchStats();

@@ -46,10 +46,7 @@ export default function RegistrationViewer() {
 
   const fetchRegistration = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`/registrations/admin/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.get(`/registrations/admin/${id}`);
       
       if (response.data.success) {
         const data = response.data.data;
@@ -72,7 +69,6 @@ export default function RegistrationViewer() {
   const handleUpdate = async (field) => {
     setUpdating(true);
     try {
-      const token = localStorage.getItem('token');
       const updateData = {};
       
       if (field === 'status') updateData.status = formData.status;
@@ -82,9 +78,7 @@ export default function RegistrationViewer() {
         if (formData.examScore) updateData.examScore = parseInt(formData.examScore);
       }
       
-      const response = await axios.put(`/registrations/admin/${id}`, updateData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.put(`/registrations/admin/${id}`, updateData);
       
       if (response.data.success) {
         setRegistration(response.data.data);
@@ -103,11 +97,9 @@ export default function RegistrationViewer() {
     
     setAddingNote(true);
     try {
-      const token = localStorage.getItem('token');
       const response = await axios.post(
         `/registrations/admin/${id}/note`,
-        { content: newNote },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { content: newNote }
       );
       
       if (response.data.success) {
@@ -130,11 +122,9 @@ export default function RegistrationViewer() {
     
     setSendingEmail(true);
     try {
-      const token = localStorage.getItem('token');
       const response = await axios.post(
         `/registrations/admin/${id}/email`,
-        emailForm,
-        { headers: { Authorization: `Bearer ${token}` } }
+        emailForm
       );
       
       if (response.data.success) {

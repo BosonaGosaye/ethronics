@@ -52,10 +52,7 @@ export default function NewsEventItemEditor() {
 
   const fetchItem = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`/newsEventItems/admin/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.get(`/newsEventItems/admin/${id}`);
       
       if (response.data.success) {
         const item = response.data.data;
@@ -94,13 +91,10 @@ export default function NewsEventItemEditor() {
 
     setSaving(true);
     try {
-      const token = localStorage.getItem('token');
       const endpoint = isNew ? '/newsEventItems/admin' : `/newsEventItems/admin/${id}`;
       const method = isNew ? 'post' : 'put';
       
-      const response = await axios[method](endpoint, formData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios[method](endpoint, formData);
       
       if (response.data.success) {
         alert(`Item ${isNew ? 'created' : 'updated'} successfully!`);

@@ -48,10 +48,7 @@ export default function MediaItemEditor() {
 
   const fetchItem = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`/mediaItems/admin/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.get(`/mediaItems/admin/${id}`);
       
       if (response.data.success) {
         const item = response.data.data;
@@ -102,7 +99,6 @@ export default function MediaItemEditor() {
 
     try {
       setSaving(true);
-      const token = localStorage.getItem('token');
       const endpoint = isNew ? '/mediaItems/admin' : `/mediaItems/admin/${id}`;
       const method = isNew ? 'post' : 'put';
       
@@ -113,9 +109,7 @@ export default function MediaItemEditor() {
         submitData.mediaUrl = formData.mediaUrls[0];
       }
       
-      const response = await axios[method](endpoint, submitData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios[method](endpoint, submitData);
       
       if (response.data.success) {
         alert(`Media item ${isNew ? 'created' : 'updated'} successfully!`);

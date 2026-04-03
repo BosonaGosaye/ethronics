@@ -52,17 +52,16 @@ export const AuthProvider = ({ children }) => {
         setToken(token);
         setUser(user);
         
-        // Set token in axios defaults AND instance
+        // Set token in both global axios and the instance
         const authHeader = `Bearer ${token}`;
         axios.defaults.headers.common['Authorization'] = authHeader;
         
-        // Also set it directly on the axios instance
-        if (axios.defaults.headers) {
-          axios.defaults.headers.common = axios.defaults.headers.common || {};
+        // IMPORTANT: Also set it on the axios instance itself
+        if (axios.defaults.headers.common) {
           axios.defaults.headers.common['Authorization'] = authHeader;
         }
         
-        console.log('Token set:', authHeader); // Debug log
+        console.log('✅ Token set successfully:', authHeader.substring(0, 20) + '...'); // Debug log
         
         return { success: true };
       } else {
@@ -72,7 +71,7 @@ export const AuthProvider = ({ children }) => {
         };
       }
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('❌ Login error:', error);
       return {
         success: false,
         message: error.response?.data?.message || 'Login failed. Please check your connection.'

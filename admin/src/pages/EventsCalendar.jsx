@@ -25,7 +25,6 @@ export default function EventsCalendar() {
 
   const fetchEvents = async () => {
     try {
-      const token = localStorage.getItem('token');
       const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
       const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
       
@@ -38,9 +37,7 @@ export default function EventsCalendar() {
       
       if (filters.category) params.append('category', filters.category);
       
-      const response = await axios.get(`/news-event-items/admin?${params}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.get(`/news-event-items/admin?${params}`);
       
       if (response.data.success) {
         // Filter events within the current month
@@ -106,10 +103,7 @@ export default function EventsCalendar() {
     if (!confirm('Are you sure you want to delete this event?')) return;
     
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`/news-event-items/admin/${eventId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await axios.delete(`/news-event-items/admin/${eventId}`);
       fetchEvents();
     } catch (error) {
       console.error('Failed to delete event:', error);

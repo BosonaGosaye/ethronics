@@ -89,10 +89,7 @@ export default function ResearchProjectEditor() {
   const fetchProject = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`/research-projects/admin/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.get(`/research-projects/admin/${id}`);
 
       if (response.data.success) {
         setFormData(response.data.data);
@@ -110,17 +107,12 @@ export default function ResearchProjectEditor() {
     
     try {
       setSaving(true);
-      const token = localStorage.getItem('token');
       
       if (id && id !== 'new') {
-        await axios.put(`/research-projects/admin/${id}`, formData, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await axios.put(`/research-projects/admin/${id}`, formData);
         alert('Project updated successfully!');
       } else {
-        await axios.post('/research-projects/admin', formData, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await axios.post('/research-projects/admin', formData);
         alert('Project created successfully!');
       }
       
