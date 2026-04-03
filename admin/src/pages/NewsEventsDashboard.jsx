@@ -30,13 +30,10 @@ export default function NewsEventsDashboard() {
 
   const fetchContent = async () => {
     try {
-      const token = localStorage.getItem('token');
       const allContent = [];
       
       for (const lang of languages) {
-        const response = await axios.get(`/newsEvents/admin/${lang.code}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const response = await axios.get(`/newsEvents/admin/${lang.code}`);
         if (response.data.success) {
           allContent.push(...response.data.data);
         }

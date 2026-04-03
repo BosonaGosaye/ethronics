@@ -27,16 +27,13 @@ export default function RegistrationsManager() {
 
   const fetchRegistrations = async () => {
     try {
-      const token = localStorage.getItem('token');
       const params = new URLSearchParams({
         ...filters,
         page: currentPage,
         limit: 20
       });
       
-      const response = await axios.get(`/registrations/admin?${params}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.get(`/registrations/admin?${params}`);
       
       if (response.data.success) {
         setRegistrations(response.data.data);
@@ -51,10 +48,7 @@ export default function RegistrationsManager() {
 
   const fetchStats = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('/registrations/admin/stats', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.get('/registrations/admin/stats');
       
       if (response.data.success) {
         setStats(response.data.data);
@@ -68,9 +62,7 @@ export default function RegistrationsManager() {
     if (!confirm('Are you sure you want to delete this registration?')) return;
     
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`/registrations/admin/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
+      await axios.delete(`/registrations/admin/${id}`);
       });
       
       fetchRegistrations();

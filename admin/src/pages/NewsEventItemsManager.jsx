@@ -29,16 +29,13 @@ export default function NewsEventItemsManager() {
 
   const fetchItems = async () => {
     try {
-      const token = localStorage.getItem('token');
       const params = new URLSearchParams({
         ...filters,
         page: currentPage,
         limit: 20
       });
       
-      const response = await axios.get(`/newsEventItems/admin?${params}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.get(`/newsEventItems/admin?${params}`);
       
       if (response.data.success) {
         setItems(response.data.data);
@@ -53,10 +50,7 @@ export default function NewsEventItemsManager() {
 
   const fetchStats = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('/newsEventItems/admin/stats', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.get('/newsEventItems/admin/stats');
       
       if (response.data.success) {
         setStats(response.data.data);
@@ -70,9 +64,7 @@ export default function NewsEventItemsManager() {
     if (!confirm('Are you sure you want to delete this item?')) return;
     
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`/newsEventItems/admin/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
+      await axios.delete(`/newsEventItems/admin/${id}`);
       });
       
       fetchItems();

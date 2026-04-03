@@ -37,16 +37,13 @@ export default function ResearchProjectsManager() {
 
   const fetchProjects = async () => {
     try {
-      const token = localStorage.getItem('token');
       const params = new URLSearchParams({
         ...filters,
         page: currentPage,
         limit: 20
       });
       
-      const response = await axios.get(`/research-projects/admin?${params}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.get(`/research-projects/admin?${params}`);
       
       if (response.data.success) {
         setProjects(response.data.data);
@@ -61,10 +58,7 @@ export default function ResearchProjectsManager() {
 
   const fetchStats = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('/research-projects/admin/stats', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.get('/research-projects/admin/stats');
       
       if (response.data.success) {
         setStats(response.data.data);
@@ -78,9 +72,7 @@ export default function ResearchProjectsManager() {
     if (!confirm('Are you sure you want to delete this project?')) return;
     
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`/research-projects/admin/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
+      await axios.delete(`/research-projects/admin/${id}`);
       });
       
       fetchProjects();
