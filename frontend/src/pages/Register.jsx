@@ -216,10 +216,10 @@ const Register = () => {
     setIsSubmitting(true)
     setSubmitError(null)
 
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 
     try {
-      const response = await fetch(`${apiUrl}/api/registrations/submit`, {
+      const response = await fetch(`${apiUrl}/registrations/submit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
