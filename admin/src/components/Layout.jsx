@@ -2,6 +2,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Home, GraduationCap, LogOut, User, Menu, X, BarChart3, Info, BookOpen, Briefcase, Users, Mail, HelpCircle, Library, Factory, Newspaper, UserPlus, Microscope, Settings } from 'lucide-react';
 import { useState } from 'react';
+import NotificationBell from './NotificationBell';
 
 export default function Layout() {
   const { user, logout } = useAuth();
@@ -64,6 +65,9 @@ export default function Layout() {
             </div>
             
             <div className="flex items-center space-x-4">
+              {/* Notification Bell */}
+              <NotificationBell />
+              
               <div className="flex items-center space-x-3 px-4 py-2 bg-gray-50 rounded-lg">
                 <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
                   <User className="w-5 h-5 text-white" />

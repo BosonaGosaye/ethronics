@@ -32,26 +32,224 @@ exports.submitRegistration = async (req, res) => {
       await transporter.sendMail({
         from: `"${fromName}" <${fromEmail}>`,
         to: registration.guardianEmail,
-        subject: 'Registration Confirmation - Summer Robotics Training',
+        subject: '🎉 Registration Confirmed - Summer Robotics & AI Training',
         html: `
-          <h2>Registration Confirmed!</h2>
-          <p>Dear ${registration.guardianName},</p>
-          <p>Thank you for registering ${registration.studentName} for our Summer Robotics & AI Training program.</p>
-          <h3>Registration Details:</h3>
-          <ul>
-            <li><strong>Student:</strong> ${registration.studentName}</li>
-            <li><strong>Grade:</strong> ${registration.grade}</li>
-            <li><strong>Session:</strong> ${registration.session}</li>
-            <li><strong>Registration ID:</strong> ${registration._id}</li>
-          </ul>
-          <h3>Next Steps:</h3>
-          <ol>
-            <li>Pay the 200 ETB pre-registration fee to CBE account: 1000535286942 (FIREW ABERA BIRU)</li>
-            <li>Send payment screenshot to our Telegram</li>
-            <li>Take the diagnostic exam (June 30 - July 4, 2018 E.C.)</li>
-          </ol>
-          <p>For questions, call: 0978467467 / 0955414045</p>
-          <p>Best regards,<br>Ethronics Robotics Team</p>
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Registration Confirmation</title>
+          </head>
+          <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7fa;">
+            <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #f4f7fa;">
+              <tr>
+                <td align="center" style="padding: 40px 20px;">
+                  <!-- Main Container -->
+                  <table role="presentation" style="max-width: 600px; width: 100%; border-collapse: collapse; background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden;">
+                    
+                    <!-- Header with Gradient -->
+                    <tr>
+                      <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center;">
+                        <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                          🎉 Registration Confirmed!
+                        </h1>
+                        <p style="margin: 10px 0 0 0; color: #e0e7ff; font-size: 16px;">
+                          Summer Robotics & AI Training 2025
+                        </p>
+                      </td>
+                    </tr>
+
+                    <!-- Welcome Message -->
+                    <tr>
+                      <td style="padding: 40px 30px 30px 30px;">
+                        <p style="margin: 0 0 20px 0; font-size: 18px; color: #1f2937; line-height: 1.6;">
+                          Dear <strong style="color: #667eea;">${registration.guardianName}</strong>,
+                        </p>
+                        <p style="margin: 0 0 20px 0; font-size: 16px; color: #4b5563; line-height: 1.6;">
+                          Thank you for registering <strong>${registration.studentName}</strong> for our exciting Summer Robotics & AI Training program! We're thrilled to have your child join us on this amazing learning journey.
+                        </p>
+                      </td>
+                    </tr>
+
+                    <!-- Registration Details Card -->
+                    <tr>
+                      <td style="padding: 0 30px 30px 30px;">
+                        <table role="presentation" style="width: 100%; border-collapse: collapse; background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%); border-radius: 12px; padding: 25px; border: 2px solid #c7d2fe;">
+                          <tr>
+                            <td>
+                              <h2 style="margin: 0 0 20px 0; color: #4c1d95; font-size: 20px; font-weight: bold;">
+                                📋 Registration Details
+                              </h2>
+                              <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                                <tr>
+                                  <td style="padding: 8px 0; color: #6b7280; font-size: 14px; width: 40%;">
+                                    <strong>Student Name:</strong>
+                                  </td>
+                                  <td style="padding: 8px 0; color: #1f2937; font-size: 14px; font-weight: 600;">
+                                    ${registration.studentName}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">
+                                    <strong>Grade:</strong>
+                                  </td>
+                                  <td style="padding: 8px 0; color: #1f2937; font-size: 14px; font-weight: 600;">
+                                    ${registration.grade}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">
+                                    <strong>Session:</strong>
+                                  </td>
+                                  <td style="padding: 8px 0; color: #1f2937; font-size: 14px; font-weight: 600;">
+                                    ${registration.session.charAt(0).toUpperCase() + registration.session.slice(1)}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">
+                                    <strong>Registration ID:</strong>
+                                  </td>
+                                  <td style="padding: 8px 0; color: #667eea; font-size: 14px; font-weight: 600; font-family: monospace;">
+                                    ${registration._id}
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <!-- Next Steps Section -->
+                    <tr>
+                      <td style="padding: 0 30px 30px 30px;">
+                        <h2 style="margin: 0 0 20px 0; color: #1f2937; font-size: 20px; font-weight: bold;">
+                          🚀 Next Steps
+                        </h2>
+                        
+                        <!-- Step 1 -->
+                        <table role="presentation" style="width: 100%; border-collapse: collapse; margin-bottom: 15px; background-color: #fef3c7; border-radius: 10px; padding: 20px; border-left: 4px solid #f59e0b;">
+                          <tr>
+                            <td>
+                              <div style="display: flex; align-items: start;">
+                                <span style="background-color: #f59e0b; color: white; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; margin-right: 15px; flex-shrink: 0;">1</span>
+                                <div>
+                                  <h3 style="margin: 0 0 8px 0; color: #92400e; font-size: 16px; font-weight: bold;">
+                                    💳 Complete Payment
+                                  </h3>
+                                  <p style="margin: 0; color: #78350f; font-size: 14px; line-height: 1.5;">
+                                    Pay <strong>200 ETB</strong> pre-registration fee to:<br>
+                                    <strong>CBE Account:</strong> 1000535286942<br>
+                                    <strong>Account Name:</strong> FIREW ABERA BIRU
+                                  </p>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </table>
+
+                        <!-- Step 2 -->
+                        <table role="presentation" style="width: 100%; border-collapse: collapse; margin-bottom: 15px; background-color: #dbeafe; border-radius: 10px; padding: 20px; border-left: 4px solid #3b82f6;">
+                          <tr>
+                            <td>
+                              <div style="display: flex; align-items: start;">
+                                <span style="background-color: #3b82f6; color: white; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; margin-right: 15px; flex-shrink: 0;">2</span>
+                                <div>
+                                  <h3 style="margin: 0 0 8px 0; color: #1e3a8a; font-size: 16px; font-weight: bold;">
+                                    📸 Send Payment Proof
+                                  </h3>
+                                  <p style="margin: 0; color: #1e40af; font-size: 14px; line-height: 1.5;">
+                                    Send your payment screenshot to our Telegram channel for verification.
+                                  </p>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </table>
+
+                        <!-- Step 3 -->
+                        <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #d1fae5; border-radius: 10px; padding: 20px; border-left: 4px solid #10b981;">
+                          <tr>
+                            <td>
+                              <div style="display: flex; align-items: start;">
+                                <span style="background-color: #10b981; color: white; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; margin-right: 15px; flex-shrink: 0;">3</span>
+                                <div>
+                                  <h3 style="margin: 0 0 8px 0; color: #065f46; font-size: 16px; font-weight: bold;">
+                                    📝 Take Diagnostic Exam
+                                  </h3>
+                                  <p style="margin: 0; color: #047857; font-size: 14px; line-height: 1.5;">
+                                    Schedule: <strong>June 30 - July 4, 2018 E.C.</strong><br>
+                                    This helps us understand your child's current skill level.
+                                  </p>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <!-- Contact Information -->
+                    <tr>
+                      <td style="padding: 0 30px 40px 30px;">
+                        <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #f9fafb; border-radius: 10px; padding: 20px; border: 1px solid #e5e7eb;">
+                          <tr>
+                            <td style="text-align: center;">
+                              <h3 style="margin: 0 0 15px 0; color: #374151; font-size: 18px; font-weight: bold;">
+                                📞 Need Help?
+                              </h3>
+                              <p style="margin: 0 0 10px 0; color: #6b7280; font-size: 14px;">
+                                Our team is here to assist you!
+                              </p>
+                              <p style="margin: 0; color: #1f2937; font-size: 16px; font-weight: 600;">
+                                📱 0978467467 / 0955414045
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                      <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center;">
+                        <p style="margin: 0 0 10px 0; color: #ffffff; font-size: 16px; font-weight: 600;">
+                          Best regards,
+                        </p>
+                        <p style="margin: 0 0 20px 0; color: #e0e7ff; font-size: 18px; font-weight: bold;">
+                          Ethronics Robotics Team
+                        </p>
+                        <div style="border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 20px; margin-top: 20px;">
+                          <p style="margin: 0 0 5px 0; color: #e0e7ff; font-size: 12px;">
+                            Ethronics | Mebrat, AMG Mall, 9th Floor
+                          </p>
+                          <p style="margin: 0; color: #e0e7ff; font-size: 12px;">
+                            Adama, Ethiopia | www.ethronics.org
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+
+                  </table>
+                  
+                  <!-- Footer Note -->
+                  <table role="presentation" style="max-width: 600px; width: 100%; margin-top: 20px;">
+                    <tr>
+                      <td style="text-align: center; padding: 0 20px;">
+                        <p style="margin: 0; color: #9ca3af; font-size: 12px; line-height: 1.5;">
+                          This is an automated confirmation email. Please do not reply to this message.<br>
+                          If you have any questions, please contact us using the phone numbers above.
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+
+                </td>
+              </tr>
+            </table>
+          </body>
+          </html>
         `
       });
     } catch (emailError) {

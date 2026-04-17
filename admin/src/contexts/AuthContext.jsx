@@ -61,8 +61,6 @@ export const AuthProvider = ({ children }) => {
           axios.defaults.headers.common['Authorization'] = authHeader;
         }
         
-        console.log('✅ Token set successfully:', authHeader.substring(0, 20) + '...'); // Debug log
-        
         return { success: true };
       } else {
         return {
@@ -71,7 +69,6 @@ export const AuthProvider = ({ children }) => {
         };
       }
     } catch (error) {
-      console.error('❌ Login error:', error);
       return {
         success: false,
         message: error.response?.data?.message || 'Login failed. Please check your connection.'

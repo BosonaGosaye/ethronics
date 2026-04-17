@@ -14,19 +14,8 @@ axiosInstance.interceptors.request.use(
     const token = axiosInstance.defaults.headers.common['Authorization'] || 
                   axios.defaults.headers.common['Authorization'];
     
-    console.log('🔍 Axios Request Interceptor:', {
-      url: config.url,
-      method: config.method,
-      hasToken: !!token,
-      tokenPreview: token ? token.substring(0, 20) + '...' : 'NO TOKEN',
-      instanceToken: axiosInstance.defaults.headers.common['Authorization'] ? 'YES' : 'NO',
-      globalToken: axios.defaults.headers.common['Authorization'] ? 'YES' : 'NO'
-    });
-    
     if (token) {
       config.headers.Authorization = token;
-    } else {
-      console.error('❌ NO TOKEN FOUND IN REQUEST!');
     }
     return config;
   },
@@ -39,14 +28,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.log('🔴 Axios Response Error:', {
-      status: error.response?.status,
-      url: error.config?.url,
-      message: error.response?.data?.message
-    });
-    
     if (error.response?.status === 401) {
-      console.error('❌ 401 UNAUTHORIZED - Redirecting to login');
       // Token expired or invalid - redirect to login
       if (window.location.pathname !== '/login') {
         window.location.href = '/login';

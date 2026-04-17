@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from '../utils/axios';
 import { 
   Home, GraduationCap, FileText, TrendingUp, 
-  Globe, Clock, CheckCircle, AlertCircle, ArrowRight, Info, BookOpen, Briefcase, Mail, HelpCircle, Library, Factory, Newspaper, UserPlus, Microscope, UserCog
+  Globe, Clock, CheckCircle, AlertCircle, ArrowRight, Info, BookOpen, Briefcase, Mail, HelpCircle, Library, Factory, Newspaper, UserPlus, Microscope, UserCog, MessageSquare, ClipboardList, Users
 } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
@@ -23,7 +23,10 @@ export default function Dashboard() {
     registerContent: { total: 0, published: 0, draft: 0 },
     researchContent: { total: 0, published: 0, draft: 0 },
     usersCount: { total: 0, active: 0 },
-    recentActivity: []
+    recentActivity: [],
+    messages: { total: 0, new: 0, read: 0, replied: 0 },
+    applications: { total: 0, pending: 0, reviewing: 0, shortlisted: 0 },
+    registrations: { total: 0, pending: 0, approved: 0, rejected: 0 }
   });
   const [loading, setLoading] = useState(true);
 
@@ -231,6 +234,58 @@ export default function Dashboard() {
         // Silently handle - may not have permission
       }
 
+      // Fetch contact messages statistics
+      let messagesStats = { total: 0, new: 0, read: 0, replied: 0 };
+      try {
+        const messagesResponse = await axios.get('/contact-messages/statistics');
+        if (messagesResponse.data.success) {
+          const data = messagesResponse.data.data;
+          messagesStats = {
+            total: data.total || 0,
+            new: data.byStatus?.new || 0,
+            read: data.byStatus?.read || 0,
+            replied: data.byStatus?.replied || 0
+          };
+        }
+      } catch (error) {
+        // Silently handle - may not have permission
+      }
+
+      // Fetch applications statistics
+      let applicationsStats = { total: 0, pending: 0, reviewing: 0, shortlisted: 0 };
+      try {
+        const applicationsResponse = await axios.get('/applications/admin/stats');
+        if (applicationsResponse.data.success) {
+          const byStatus = applicationsResponse.data.data.byStatus || [];
+          const total = byStatus.reduce((sum, item) => sum + item.count, 0);
+          applicationsStats = {
+            total,
+            pending: byStatus.find(s => s._id === 'pending')?.count || 0,
+            reviewing: byStatus.find(s => s._id === 'reviewing')?.count || 0,
+            shortlisted: byStatus.find(s => s._id === 'shortlisted')?.count || 0
+          };
+        }
+      } catch (error) {
+        // Silently handle - may not have permission
+      }
+
+      // Fetch registrations statistics
+      let registrationsStats = { total: 0, pending: 0, approved: 0, rejected: 0 };
+      try {
+        const registrationsResponse = await axios.get('/registrations/admin/stats');
+        if (registrationsResponse.data.success) {
+          const data = registrationsResponse.data.data;
+          registrationsStats = {
+            total: data.total || 0,
+            pending: data.pending || 0,
+            approved: data.approved || 0,
+            rejected: data.rejected || 0
+          };
+        }
+      } catch (error) {
+        // Silently handle - may not have permission
+      }
+
       // Fetch recent activity logs from backend
       try {
         const activityResponse = await axios.get('/users/activities/all?limit=10');
@@ -379,7 +434,10 @@ export default function Dashboard() {
         registerContent: registerStats,
         researchContent: researchStats,
         usersCount: usersCount,
-        recentActivity
+        recentActivity,
+        messages: messagesStats,
+        applications: applicationsStats,
+        registrations: registrationsStats
       });
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
@@ -398,7 +456,10 @@ export default function Dashboard() {
         registerContent: { total: 0, published: 0, draft: 0 },
         researchContent: { total: 0, published: 0, draft: 0 },
         usersCount: { total: 0, active: 0 },
-        recentActivity: []
+        recentActivity: [],
+        messages: { total: 0, new: 0, read: 0, replied: 0 },
+        applications: { total: 0, pending: 0, reviewing: 0, shortlisted: 0 },
+        registrations: { total: 0, pending: 0, approved: 0, rejected: 0 }
       });
     } finally {
       setLoading(false);
@@ -571,6 +632,141 @@ export default function Dashboard() {
           <p className="text-sm text-gray-600 mb-1">Languages</p>
           <p className="text-3xl font-bold text-purple-600">3</p>
           <p className="text-xs text-gray-500 mt-2">EN, AM, OM</p>
+        </div>
+      </div>
+
+      {/* Notifications Section */}
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Notifications & Activity</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Contact Messages Card */}
+          <Link
+            to="/contact-messages"
+            className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100"
+          >
+            <div className="h-2 bg-gradient-to-r from-blue-500 to-cyan-500"></div>
+            <div className="p-6">
+              <div className="flex items-start justify-between mb-4">
+                <div className="p-3 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg">
+                  <MessageSquare className="w-6 h-6 text-white" />
+                </div>
+                {stats.messages.new > 0 && (
+                  <span className="px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full animate-pulse">
+                    {stats.messages.new} New
+                  </span>
+                )}
+              </div>
+              
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Contact Messages</h3>
+              <p className="text-gray-600 text-sm mb-4">View and respond to customer inquiries</p>
+              
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Total Messages</span>
+                  <span className="font-bold text-gray-900">{stats.messages.total}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">New</span>
+                  <span className="font-bold text-red-600">{stats.messages.new}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Replied</span>
+                  <span className="font-bold text-green-600">{stats.messages.replied}</span>
+                </div>
+              </div>
+              
+              <div className="mt-4 flex items-center text-blue-600 text-sm font-medium group-hover:translate-x-1 transition-transform">
+                View All Messages
+                <ArrowRight className="w-4 h-4 ml-1" />
+              </div>
+            </div>
+          </Link>
+
+          {/* Job Applications Card */}
+          <Link
+            to="/applications"
+            className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100"
+          >
+            <div className="h-2 bg-gradient-to-r from-purple-500 to-pink-500"></div>
+            <div className="p-6">
+              <div className="flex items-start justify-between mb-4">
+                <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg">
+                  <ClipboardList className="w-6 h-6 text-white" />
+                </div>
+                {stats.applications.pending > 0 && (
+                  <span className="px-3 py-1 bg-orange-500 text-white text-xs font-bold rounded-full animate-pulse">
+                    {stats.applications.pending} Pending
+                  </span>
+                )}
+              </div>
+              
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Job Applications</h3>
+              <p className="text-gray-600 text-sm mb-4">Review and manage job applications</p>
+              
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Total Applications</span>
+                  <span className="font-bold text-gray-900">{stats.applications.total}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Pending</span>
+                  <span className="font-bold text-orange-600">{stats.applications.pending}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Shortlisted</span>
+                  <span className="font-bold text-green-600">{stats.applications.shortlisted}</span>
+                </div>
+              </div>
+              
+              <div className="mt-4 flex items-center text-purple-600 text-sm font-medium group-hover:translate-x-1 transition-transform">
+                View All Applications
+                <ArrowRight className="w-4 h-4 ml-1" />
+              </div>
+            </div>
+          </Link>
+
+          {/* Training Registrations Card */}
+          <Link
+            to="/registrations"
+            className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100"
+          >
+            <div className="h-2 bg-gradient-to-r from-green-500 to-emerald-500"></div>
+            <div className="p-6">
+              <div className="flex items-start justify-between mb-4">
+                <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg">
+                  <Users className="w-6 h-6 text-white" />
+                </div>
+                {stats.registrations.pending > 0 && (
+                  <span className="px-3 py-1 bg-yellow-500 text-white text-xs font-bold rounded-full animate-pulse">
+                    {stats.registrations.pending} Pending
+                  </span>
+                )}
+              </div>
+              
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Training Registrations</h3>
+              <p className="text-gray-600 text-sm mb-4">Manage training program registrations</p>
+              
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Total Registrations</span>
+                  <span className="font-bold text-gray-900">{stats.registrations.total}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Pending</span>
+                  <span className="font-bold text-yellow-600">{stats.registrations.pending}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Approved</span>
+                  <span className="font-bold text-green-600">{stats.registrations.approved}</span>
+                </div>
+              </div>
+              
+              <div className="mt-4 flex items-center text-green-600 text-sm font-medium group-hover:translate-x-1 transition-transform">
+                View All Registrations
+                <ArrowRight className="w-4 h-4 ml-1" />
+              </div>
+            </div>
+          </Link>
         </div>
       </div>
 

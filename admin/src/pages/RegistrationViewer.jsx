@@ -59,7 +59,6 @@ export default function RegistrationViewer() {
         });
       }
     } catch (error) {
-      console.error('Failed to fetch registration:', error);
       alert('Failed to load registration');
     } finally {
       setLoading(false);
@@ -85,7 +84,6 @@ export default function RegistrationViewer() {
         setEditMode({ ...editMode, [field]: false });
       }
     } catch (error) {
-      console.error('Failed to update:', error);
       alert('Failed to update registration');
     } finally {
       setUpdating(false);
@@ -107,7 +105,6 @@ export default function RegistrationViewer() {
         setNewNote('');
       }
     } catch (error) {
-      console.error('Failed to add note:', error);
       alert('Failed to add note');
     } finally {
       setAddingNote(false);
@@ -134,8 +131,6 @@ export default function RegistrationViewer() {
         alert('Email sent successfully!');
       }
     } catch (error) {
-      console.error('Failed to send email:', error);
-      
       // Show detailed error message
       let errorMessage = 'Failed to send email';
       if (error.response?.data?.message) {
@@ -327,7 +322,7 @@ export default function RegistrationViewer() {
                   <div key={index} className="bg-gray-50 rounded-lg p-4">
                     <p className="text-gray-900">{note.content}</p>
                     <p className="text-xs text-gray-500 mt-2">
-                      {new Date(note.addedAt).toLocaleString()} • {note.addedBy}
+                      {new Date(note.addedAt).toLocaleString()} • {note.addedBy?.name || note.addedBy || 'Unknown'}
                     </p>
                   </div>
                 ))
@@ -395,7 +390,7 @@ export default function RegistrationViewer() {
                     <p className="font-medium text-gray-900">{email.subject}</p>
                     <p className="text-sm text-gray-600 mt-1">{email.body}</p>
                     <p className="text-xs text-gray-500 mt-2">
-                      {new Date(email.sentAt).toLocaleString()} • Sent by {email.sentBy}
+                      {new Date(email.sentAt).toLocaleString()} • Sent by {email.sentBy?.name || email.sentBy || 'Unknown'}
                     </p>
                   </div>
                 ))
