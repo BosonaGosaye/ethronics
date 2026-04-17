@@ -219,9 +219,17 @@ exports.replyToMessage = async (req, res) => {
     
     // Send email
     try {
+      console.log('📧 Attempting to send email...');
+      console.log('EMAIL_USER:', process.env.EMAIL_USER ? 'SET' : 'NOT SET');
+      console.log('EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD ? 'SET (length: ' + process.env.EMAIL_PASSWORD.length + ')' : 'NOT SET');
+      console.log('EMAIL_FROM_NAME:', process.env.EMAIL_FROM_NAME || 'NOT SET');
+      
       const transporter = createTransporter();
       const fromName = process.env.EMAIL_FROM_NAME || 'Ethronics';
       const fromEmail = process.env.EMAIL_USER;
+      
+      console.log('📤 Sending email from:', `"${fromName}" <${fromEmail}>`);
+      console.log('📤 Sending email to:', message.email);
       
       await transporter.sendMail({
         from: `"${fromName}" <${fromEmail}>`,
@@ -250,6 +258,8 @@ exports.replyToMessage = async (req, res) => {
         `
       });
       
+      console.log('✅ Email sent successfully!');
+      
       // Update message
       message.status = 'replied';
       message.replyMessage = replyMessage;
@@ -263,11 +273,16 @@ exports.replyToMessage = async (req, res) => {
         data: message
       });
     } catch (emailError) {
-      console.error('Email sending error:', emailError);
+      console.error('❌ Email sending error:', emailError);
+      console.error('Error code:', emailError.code);
+      console.error('Error command:', emailError.command);
+      console.error('Error response:', emailError.response);
+      console.error('Error responseCode:', emailError.responseCode);
       return res.status(500).json({
         success: false,
         message: 'Failed to send email',
         error: emailError.message,
+        errorCode: emailError.code,
         hint: 'Check your email configuration in .env file. For Gmail, make sure you are using an App Password, not your regular password.'
       });
     }

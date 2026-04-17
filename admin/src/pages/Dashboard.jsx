@@ -221,7 +221,7 @@ export default function Dashboard() {
       // Fetch users count
       let usersCount = { total: 0, active: 0 };
       try {
-        const usersResponse = await axios.get('/users/admin/all');
+        const usersResponse = await axios.get('/users');
         const usersData = usersResponse.data.data || [];
         usersCount = {
           total: usersData.length,
