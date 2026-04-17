@@ -445,7 +445,7 @@ exports.addNote = async (req, res) => {
 // Send email to registrant (admin)
 exports.sendEmail = async (req, res) => {
   try {
-    const { subject, body } = req.body;
+    const { body } = req.body; // Only need message body now
     const registration = await Registration.findById(req.params.id);
 
     if (!registration) {
@@ -464,17 +464,186 @@ exports.sendEmail = async (req, res) => {
       });
     }
 
-    // Send email
+    // Send email with beautiful template
     try {
       const transporter = createTransporter();
       const fromName = process.env.EMAIL_FROM_NAME || 'Ethronics';
       const fromEmail = process.env.EMAIL_USER;
       
+      // Predefined subject
+      const subject = `📢 Update: ${registration.studentName}'s Registration - Summer Robotics Training`;
+      
       await transporter.sendMail({
         from: `"${fromName}" <${fromEmail}>`,
         to: registration.guardianEmail,
         subject,
-        html: body
+        html: `
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Registration Update</title>
+          </head>
+          <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7fa;">
+            <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #f4f7fa;">
+              <tr>
+                <td align="center" style="padding: 40px 20px;">
+                  <!-- Main Container -->
+                  <table role="presentation" style="max-width: 600px; width: 100%; border-collapse: collapse; background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden;">
+                    
+                    <!-- Header with Gradient -->
+                    <tr>
+                      <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center;">
+                        <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                          📢 Registration Update
+                        </h1>
+                        <p style="margin: 10px 0 0 0; color: #e0e7ff; font-size: 16px;">
+                          Summer Robotics & AI Training 2025
+                        </p>
+                      </td>
+                    </tr>
+
+                    <!-- Greeting -->
+                    <tr>
+                      <td style="padding: 40px 30px 30px 30px;">
+                        <p style="margin: 0 0 20px 0; font-size: 18px; color: #1f2937; line-height: 1.6;">
+                          Dear <strong style="color: #667eea;">${registration.guardianName}</strong>,
+                        </p>
+                        <p style="margin: 0 0 20px 0; font-size: 16px; color: #4b5563; line-height: 1.6;">
+                          We have an important update regarding <strong>${registration.studentName}</strong>'s registration for our Summer Robotics & AI Training program.
+                        </p>
+                      </td>
+                    </tr>
+
+                    <!-- Message Content Card -->
+                    <tr>
+                      <td style="padding: 0 30px 30px 30px;">
+                        <table role="presentation" style="width: 100%; border-collapse: collapse; background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%); border-radius: 12px; padding: 25px; border-left: 4px solid #667eea;">
+                          <tr>
+                            <td>
+                              <h2 style="margin: 0 0 15px 0; color: #4c1d95; font-size: 18px; font-weight: bold;">
+                                💬 Message from Ethronics Team
+                              </h2>
+                              <div style="color: #1f2937; font-size: 15px; line-height: 1.7; white-space: pre-wrap;">
+${body}
+                              </div>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <!-- Registration Details Reference -->
+                    <tr>
+                      <td style="padding: 0 30px 30px 30px;">
+                        <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #f9fafb; border-radius: 10px; padding: 20px; border: 1px solid #e5e7eb;">
+                          <tr>
+                            <td>
+                              <h3 style="margin: 0 0 15px 0; color: #374151; font-size: 16px; font-weight: bold;">
+                                📋 Registration Reference
+                              </h3>
+                              <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                                <tr>
+                                  <td style="padding: 5px 0; color: #6b7280; font-size: 14px; width: 40%;">
+                                    <strong>Student:</strong>
+                                  </td>
+                                  <td style="padding: 5px 0; color: #1f2937; font-size: 14px; font-weight: 600;">
+                                    ${registration.studentName}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style="padding: 5px 0; color: #6b7280; font-size: 14px;">
+                                    <strong>Grade:</strong>
+                                  </td>
+                                  <td style="padding: 5px 0; color: #1f2937; font-size: 14px; font-weight: 600;">
+                                    ${registration.grade}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style="padding: 5px 0; color: #6b7280; font-size: 14px;">
+                                    <strong>Session:</strong>
+                                  </td>
+                                  <td style="padding: 5px 0; color: #1f2937; font-size: 14px; font-weight: 600;">
+                                    ${registration.session.charAt(0).toUpperCase() + registration.session.slice(1)}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style="padding: 5px 0; color: #6b7280; font-size: 14px;">
+                                    <strong>Registration ID:</strong>
+                                  </td>
+                                  <td style="padding: 5px 0; color: #667eea; font-size: 13px; font-weight: 600; font-family: monospace;">
+                                    ${registration._id}
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <!-- Contact Information -->
+                    <tr>
+                      <td style="padding: 0 30px 40px 30px;">
+                        <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #fef3c7; border-radius: 10px; padding: 20px; border: 1px solid #fbbf24;">
+                          <tr>
+                            <td style="text-align: center;">
+                              <h3 style="margin: 0 0 10px 0; color: #92400e; font-size: 16px; font-weight: bold;">
+                                📞 Questions or Concerns?
+                              </h3>
+                              <p style="margin: 0 0 10px 0; color: #78350f; font-size: 14px;">
+                                Our team is here to help!
+                              </p>
+                              <p style="margin: 0; color: #92400e; font-size: 16px; font-weight: 600;">
+                                📱 0978467467 / 0955414045
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                      <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center;">
+                        <p style="margin: 0 0 10px 0; color: #ffffff; font-size: 16px; font-weight: 600;">
+                          Best regards,
+                        </p>
+                        <p style="margin: 0 0 20px 0; color: #e0e7ff; font-size: 18px; font-weight: bold;">
+                          Ethronics Robotics Team
+                        </p>
+                        <div style="border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 20px; margin-top: 20px;">
+                          <p style="margin: 0 0 5px 0; color: #e0e7ff; font-size: 12px;">
+                            Ethronics | Mebrat, AMG Mall, 9th Floor
+                          </p>
+                          <p style="margin: 0; color: #e0e7ff; font-size: 12px;">
+                            Adama, Ethiopia | www.ethronics.org
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+
+                  </table>
+                  
+                  <!-- Footer Note -->
+                  <table role="presentation" style="max-width: 600px; width: 100%; margin-top: 20px;">
+                    <tr>
+                      <td style="text-align: center; padding: 0 20px;">
+                        <p style="margin: 0; color: #9ca3af; font-size: 12px; line-height: 1.5;">
+                          This email was sent from Ethronics Admin Panel.<br>
+                          If you have any questions, please contact us using the phone numbers above.
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+
+                </td>
+              </tr>
+            </table>
+          </body>
+          </html>
+        `
       });
 
       // Record email in database
@@ -492,7 +661,6 @@ exports.sendEmail = async (req, res) => {
         data: registration
       });
     } catch (emailError) {
-      console.error('Email sending error:', emailError);
       return res.status(500).json({
         success: false,
         message: 'Failed to send email',
@@ -501,7 +669,6 @@ exports.sendEmail = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('Send email error:', error);
     res.status(500).json({
       success: false,
       message: 'Server error',

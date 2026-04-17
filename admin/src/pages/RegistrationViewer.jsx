@@ -34,7 +34,6 @@ export default function RegistrationViewer() {
   
   // Email state
   const [emailForm, setEmailForm] = useState({
-    subject: '',
     body: ''
   });
   const [sendingEmail, setSendingEmail] = useState(false);
@@ -112,8 +111,8 @@ export default function RegistrationViewer() {
   };
 
   const handleSendEmail = async () => {
-    if (!emailForm.subject.trim() || !emailForm.body.trim()) {
-      alert('Please fill in both subject and body');
+    if (!emailForm.body.trim()) {
+      alert('Please write a message');
       return;
     }
     
@@ -126,7 +125,7 @@ export default function RegistrationViewer() {
       
       if (response.data.success) {
         setRegistration(response.data.data);
-        setEmailForm({ subject: '', body: '' });
+        setEmailForm({ body: '' });
         setShowEmailForm(false);
         alert('Email sent successfully!');
       }
@@ -350,25 +349,24 @@ export default function RegistrationViewer() {
             {/* Email Form */}
             {showEmailForm && (
               <div className="mb-6 space-y-4 p-4 bg-gray-50 rounded-lg">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
-                  <input
-                    type="text"
-                    value={emailForm.subject}
-                    onChange={(e) => setEmailForm({ ...emailForm, subject: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    placeholder="Email subject"
-                  />
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                  <p className="text-sm text-blue-800">
+                    <strong>📧 Email will be sent with subject:</strong><br/>
+                    "📢 Update: {registration.studentName}'s Registration - Summer Robotics Training"
+                  </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Your Message</label>
                   <textarea
                     value={emailForm.body}
-                    onChange={(e) => setEmailForm({ ...emailForm, body: e.target.value })}
-                    rows="6"
+                    onChange={(e) => setEmailForm({ body: e.target.value })}
+                    rows="8"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    placeholder="Email message"
+                    placeholder="Write your message to the guardian here..."
                   />
+                  <p className="text-xs text-gray-500 mt-1">
+                    This message will be sent in a beautiful email template with registration details.
+                  </p>
                 </div>
                 <button
                   onClick={handleSendEmail}
