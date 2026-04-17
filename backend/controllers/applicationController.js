@@ -5,19 +5,17 @@ const { cloudinary } = require('../config/cloudinary');
 const nodemailer = require('nodemailer');
 const emailTemplates = require('../utils/emailTemplates');
 
-// Helper function to create email transporter
+// Helper function to create email transporter with Gmail defaults
 const createTransporter = () => {
-  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
     return null;
   }
   
   return nodemailer.createTransporter({
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT) || 587,
-    secure: false,
+    service: 'gmail',
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD
     }
   });
 };
@@ -31,9 +29,12 @@ const sendEmail = async (to, subject, html) => {
       console.log('Email not configured. Skipping email send.');
       return;
     }
+
+    const fromName = process.env.EMAIL_FROM_NAME || 'Ethronics Careers';
+    const fromEmail = process.env.EMAIL_USER;
     
     await transporter.sendMail({
-      from: `"Ethronics Careers" <${process.env.SMTP_USER}>`,
+      from: `"${fromName}" <${fromEmail}>`,
       to,
       subject,
       html

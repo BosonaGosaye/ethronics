@@ -1,15 +1,13 @@
 const Registration = require('../models/Registration');
 const nodemailer = require('nodemailer');
 
-// Create email transporter
+// Create email transporter with Gmail defaults
 const createTransporter = () => {
   return nodemailer.createTransporter({
-    host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-    port: process.env.EMAIL_PORT || 587,
-    secure: false,
+    service: 'gmail',
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
+      pass: process.env.EMAIL_PASSWORD
     }
   });
 };
@@ -28,8 +26,11 @@ exports.submitRegistration = async (req, res) => {
     // Send confirmation email to guardian
     try {
       const transporter = createTransporter();
+      const fromName = process.env.EMAIL_FROM_NAME || 'Ethronics';
+      const fromEmail = process.env.EMAIL_USER;
+      
       await transporter.sendMail({
-        from: process.env.EMAIL_FROM || 'noreply@ethronics.com',
+        from: `"${fromName}" <${fromEmail}>`,
         to: registration.guardianEmail,
         subject: 'Registration Confirmation - Summer Robotics Training',
         html: `
@@ -257,10 +258,10 @@ exports.sendEmail = async (req, res) => {
     }
 
     // Check if email is configured
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
       return res.status(400).json({
         success: false,
-        message: 'Email service not configured. Please configure EMAIL_USER and EMAIL_PASS in .env file.',
+        message: 'Email service not configured. Please configure EMAIL_USER and EMAIL_PASSWORD in .env file.',
         hint: 'For Gmail: Enable 2FA and generate an App Password at https://myaccount.google.com/apppasswords'
       });
     }
@@ -268,8 +269,11 @@ exports.sendEmail = async (req, res) => {
     // Send email
     try {
       const transporter = createTransporter();
+      const fromName = process.env.EMAIL_FROM_NAME || 'Ethronics';
+      const fromEmail = process.env.EMAIL_USER;
+      
       await transporter.sendMail({
-        from: process.env.EMAIL_FROM || 'noreply@ethronics.com',
+        from: `"${fromName}" <${fromEmail}>`,
         to: registration.guardianEmail,
         subject,
         html: body

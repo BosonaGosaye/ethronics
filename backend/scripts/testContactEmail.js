@@ -1,8 +1,8 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
 
-async function testEmail() {
-  console.log('🧪 Testing Email Configuration...\n');
+async function testContactEmail() {
+  console.log('🧪 Testing Contact Message Reply Email Configuration...\n');
 
   // Check if email is configured
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
@@ -53,34 +53,51 @@ async function testEmail() {
     process.exit(1);
   }
 
-  // Send test email
+  // Send test contact reply email
   const testEmail = process.env.EMAIL_USER; // Send to yourself for testing
+  const testUserName = 'Test User';
+  const testCategory = 'General Inquiry';
+  const testOriginalMessage = 'Hello, I would like to know more about your robotics programs. Can you provide more information?';
+  const testReplyMessage = 'Thank you for your interest in our robotics programs!\n\nWe offer comprehensive training in robotics and AI for students of all levels. Our programs include:\n\n- Basic Robotics (Grades 4-6)\n- Intermediate Robotics (Grades 7-9)\n- Advanced Robotics & AI (Grades 10-12)\n\nPlease visit our website or call us for more details.';
   
-  console.log(`📤 Sending test email to ${testEmail}...`);
+  console.log(`📤 Sending test contact reply email to ${testEmail}...`);
   try {
     const info = await transporter.sendMail({
       from: `"${fromName}" <${fromEmail}>`,
       to: testEmail,
-      subject: 'Test Email from Ethronics Registration System',
+      subject: `Re: Your ${testCategory} inquiry - Ethronics`,
       html: `
-        <h2>Email Configuration Test</h2>
-        <p>This is a test email from the Ethronics Registration System.</p>
-        <p>If you received this email, your email configuration is working correctly!</p>
-        <hr>
-        <p><strong>Configuration Details:</strong></p>
-        <ul>
-          <li>Service: Gmail</li>
-          <li>From Name: ${fromName}</li>
-          <li>From Email: ${fromEmail}</li>
-        </ul>
-        <p><em>Sent at: ${new Date().toLocaleString()}</em></p>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #6366f1;">Ethronics Response</h2>
+          <p>Dear ${testUserName},</p>
+          <p>Thank you for contacting us. Here is our response to your inquiry:</p>
+          <div style="background-color: #f3f4f6; padding: 15px; border-left: 4px solid #6366f1; margin: 20px 0;">
+            ${testReplyMessage.replace(/\n/g, '<br>')}
+          </div>
+          <p><strong>Your Original Message:</strong></p>
+          <div style="background-color: #f9fafb; padding: 15px; border-left: 4px solid #d1d5db; margin: 20px 0;">
+            ${testOriginalMessage.replace(/\n/g, '<br>')}
+          </div>
+          <p>If you have any further questions, please don't hesitate to reach out.</p>
+          <p>Best regards,<br>Ethronics Team</p>
+          <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">
+          <p style="font-size: 12px; color: #6b7280;">
+            Ethronics | Mebrat, AMG Mall, 9th Floor | Adama, Ethiopia<br>
+            Email: info@ethronics.com | Phone: +251-XXX-XXXXXX
+          </p>
+        </div>
       `
     });
 
-    console.log('✅ Test email sent successfully!');
+    console.log('✅ Test contact reply email sent successfully!');
     console.log(`   Message ID: ${info.messageId}`);
     console.log(`\n📬 Check your inbox at ${testEmail}`);
-    console.log('\n✨ Email configuration is working correctly!');
+    console.log('\n✨ Contact message reply email configuration is working correctly!');
+    console.log('\nThe email includes:');
+    console.log('  ✓ Professional HTML formatting');
+    console.log('  ✓ Admin reply message');
+    console.log('  ✓ Original user message');
+    console.log('  ✓ Contact information footer');
   } catch (error) {
     console.error('❌ Failed to send test email!');
     console.error('Error:', error.message);
@@ -88,4 +105,4 @@ async function testEmail() {
   }
 }
 
-testEmail();
+testContactEmail();

@@ -1,15 +1,13 @@
 const ContactMessage = require('../models/ContactMessage');
 const nodemailer = require('nodemailer');
 
-// Configure email transporter (you'll need to set up SMTP credentials in .env)
+// Create email transporter with Gmail defaults
 const createTransporter = () => {
   return nodemailer.createTransporter({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: process.env.SMTP_PORT || 587,
-    secure: false,
+    service: 'gmail',
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD
     }
   });
 };
@@ -209,13 +207,24 @@ exports.replyToMessage = async (req, res) => {
         message: 'Message not found'
       });
     }
+
+    // Check if email is configured
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email service not configured. Please configure EMAIL_USER and EMAIL_PASSWORD in .env file.',
+        hint: 'For Gmail: Enable 2FA and generate an App Password at https://myaccount.google.com/apppasswords'
+      });
+    }
     
     // Send email
     try {
       const transporter = createTransporter();
+      const fromName = process.env.EMAIL_FROM_NAME || 'Ethronics';
+      const fromEmail = process.env.EMAIL_USER;
       
       await transporter.sendMail({
-        from: process.env.SMTP_FROM || process.env.SMTP_USER,
+        from: `"${fromName}" <${fromEmail}>`,
         to: message.email,
         subject: `Re: Your ${message.category} inquiry - Ethronics`,
         html: `
@@ -257,11 +266,13 @@ exports.replyToMessage = async (req, res) => {
       console.error('Email sending error:', emailError);
       return res.status(500).json({
         success: false,
-        message: 'Failed to send email. Please check SMTP configuration.',
-        error: emailError.message
+        message: 'Failed to send email',
+        error: emailError.message,
+        hint: 'Check your email configuration in .env file. For Gmail, make sure you are using an App Password, not your regular password.'
       });
     }
   } catch (error) {
+    console.error('Reply to message error:', error);
     res.status(500).json({
       success: false,
       message: 'Server error',
