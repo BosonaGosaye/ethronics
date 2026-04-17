@@ -252,7 +252,7 @@ exports.replyToMessage = async (req, res) => {
             <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">
             <p style="font-size: 12px; color: #6b7280;">
               Ethronics | Mebrat, AMG Mall, 9th Floor | Adama, Ethiopia<br>
-              Email: info@ethronics.com | Phone: +251-XXX-XXXXXX
+              Email: contact@ethronics.org | Phone: +251978467467
             </p>
           </div>
         `

@@ -48,7 +48,7 @@ exports.submitRegistration = async (req, res) => {
           <ol>
             <li>Pay the 200 ETB pre-registration fee to CBE account: 1000535286942 (FIREW ABERA BIRU)</li>
             <li>Send payment screenshot to our Telegram</li>
-            <li>Take the diagnostic exam (June 30 - July 4, 2017 E.C.)</li>
+            <li>Take the diagnostic exam (June 30 - July 4, 2018 E.C.)</li>
           </ol>
           <p>For questions, call: 0978467467 / 0955414045</p>
           <p>Best regards,<br>Ethronics Robotics Team</p>
